@@ -35,6 +35,7 @@ class LoginForm(FlaskForm):
 
 class ResearchForm(FlaskForm):
     """ฟอร์มสำหรับเพิ่ม/แก้ไขงานวิจัย"""
+    # ข้อมูลพื้นฐาน
     title = StringField('ชื่อหัวข้อวิจัย (ไทย)', validators=[DataRequired(), Length(max=300)])
     title_en = StringField('ชื่อหัวข้อวิจัย (English)', validators=[Optional(), Length(max=300)])
     authors = TextAreaField('ผู้วิจัย', validators=[DataRequired()],
@@ -64,6 +65,42 @@ class ResearchForm(FlaskForm):
     tags = StringField('แท็ก', validators=[Optional(), Length(max=200)],
                       description='คั่นด้วยเครื่องหมายจุลภาค')
     category_id = SelectField('หมวดหมู่', coerce=int, validators=[Optional()])
+
+    # Dublin Core Metadata Fields
+    publisher = StringField('ผู้เผยแพร่', validators=[Optional(), Length(max=200)],
+                           description='องค์กร/สำนักพิมพ์ที่เผยแพร่งานวิจัย')
+    contributor = TextAreaField('ผู้มีส่วนร่วม', validators=[Optional()],
+                               description='ที่ปรึกษา, บรรณาธิการ หรือผู้มีส่วนร่วมอื่นๆ คั่นด้วยเครื่องหมายจุลภาค')
+    source = StringField('แหล่งที่มา', validators=[Optional(), Length(max=500)],
+                        description='งานหรือทรัพยากรที่เป็นที่มาของงานนี้')
+    language = SelectField('ภาษา',
+                          choices=[
+                              ('th', 'ไทย (th)'),
+                              ('en', 'อังกฤษ (en)'),
+                              ('th,en', 'ไทยและอังกฤษ (th,en)'),
+                              ('other', 'อื่นๆ')
+                          ],
+                          default='th',
+                          validators=[Optional()])
+    relation = TextAreaField('ความสัมพันธ์', validators=[Optional()],
+                            description='ความสัมพันธ์กับทรัพยากรอื่น เช่น "เป็นส่วนหนึ่งของโครงการ..."')
+    coverage = StringField('ขอบเขต', validators=[Optional(), Length(max=200)],
+                          description='ขอบเขตภูมิศาสตร์หรือช่วงเวลา เช่น "ประเทศไทย", "2020-2023"')
+    rights = SelectField('สิทธิ์/ลิขสิทธิ์',
+                        choices=[
+                            ('', 'ไม่ระบุ'),
+                            ('CC0', 'CC0 - สาธารณสมบัติ'),
+                            ('CC-BY', 'CC BY - แสดงที่มา'),
+                            ('CC-BY-SA', 'CC BY-SA - แสดงที่มา-อนุญาตแบบเดียวกัน'),
+                            ('CC-BY-ND', 'CC BY-ND - แสดงที่มา-ห้ามดัดแปลง'),
+                            ('CC-BY-NC', 'CC BY-NC - แสดงที่มา-ไม่ใช้เชิงพาณิชย์'),
+                            ('CC-BY-NC-SA', 'CC BY-NC-SA - แสดงที่มา-ไม่ใช้เชิงพาณิชย์-อนุญาตแบบเดียวกัน'),
+                            ('CC-BY-NC-ND', 'CC BY-NC-ND - แสดงที่มา-ไม่ใช้เชิงพาณิชย์-ห้ามดัดแปลง'),
+                            ('All Rights Reserved', 'All Rights Reserved - ลิขสิทธิ์สงวนไว้'),
+                            ('Custom', 'กำหนดเอง')
+                        ],
+                        validators=[Optional()])
+
     submit = SubmitField('บันทึก')
 
 

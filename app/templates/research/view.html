@@ -113,6 +113,91 @@
             </div>
             {% endif %}
 
+            <!-- Dublin Core Metadata Section -->
+            {% if research.publisher or research.contributor or research.source or research.relation or research.coverage or research.rights or research.language %}
+            <hr class="my-6 border-gray-300">
+            <h5 class="text-xl font-semibold text-gray-800 mb-4">
+                <i class="fas fa-database mr-2"></i> Dublin Core Metadata
+                <span class="text-sm font-normal text-gray-600 ml-2">(มาตรฐานสากล)</span>
+            </h5>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                {% if research.publisher %}
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-building mr-2"></i> ผู้เผยแพร่:</strong>
+                    <p class="text-gray-600 mt-1">{{ research.publisher }}</p>
+                </div>
+                {% endif %}
+
+                {% if research.language %}
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-language mr-2"></i> ภาษา:</strong>
+                    <p class="text-gray-600 mt-1">
+                        {% if research.language == 'th' %}ไทย
+                        {% elif research.language == 'en' %}อังกฤษ
+                        {% elif research.language == 'th,en' %}ไทย และ อังกฤษ
+                        {% else %}{{ research.language }}
+                        {% endif %}
+                    </p>
+                </div>
+                {% endif %}
+
+                {% if research.format %}
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-file-code mr-2"></i> รูปแบบ:</strong>
+                    <p class="text-gray-600 mt-1">{{ research.format }}</p>
+                </div>
+                {% endif %}
+
+                {% if research.rights %}
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-copyright mr-2"></i> สิทธิ์/ลิขสิทธิ์:</strong>
+                    <p class="text-gray-600 mt-1">{{ research.rights }}</p>
+                </div>
+                {% endif %}
+            </div>
+
+            {% if research.contributor %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center mb-2"><i class="fas fa-users mr-2"></i> ผู้มีส่วนร่วม:</strong>
+                <p class="text-gray-600">{{ research.contributor }}</p>
+            </div>
+            {% endif %}
+
+            {% if research.source %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center mb-2"><i class="fas fa-book mr-2"></i> แหล่งที่มา:</strong>
+                <p class="text-gray-600">{{ research.source }}</p>
+            </div>
+            {% endif %}
+
+            {% if research.relation %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center mb-2"><i class="fas fa-project-diagram mr-2"></i> ความสัมพันธ์:</strong>
+                <p class="text-gray-600">{{ research.relation }}</p>
+            </div>
+            {% endif %}
+
+            {% if research.coverage %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center mb-2"><i class="fas fa-map-marked-alt mr-2"></i> ขอบเขต:</strong>
+                <p class="text-gray-600">{{ research.coverage }}</p>
+            </div>
+            {% endif %}
+
+            <!-- Dublin Core Export Buttons -->
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="{{ url_for('research.export_dublin_core_xml_single', id=research.id) }}"
+                   class="px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition inline-flex items-center">
+                    <i class="fas fa-file-code mr-2"></i> Export DC XML
+                </a>
+                <a href="{{ url_for('research.export_dublin_core_json_single', id=research.id) }}"
+                   class="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition inline-flex items-center">
+                    <i class="fas fa-file-code mr-2"></i> Export DC JSON
+                </a>
+            </div>
+            {% endif %}
+
             <hr class="my-6 border-gray-300">
             <div class="text-sm text-gray-500">
                 <i class="fas fa-user-circle mr-1"></i> เพิ่มโดย: {{ research.uploader.full_name or research.uploader.username }} |
