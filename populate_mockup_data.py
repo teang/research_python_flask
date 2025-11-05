@@ -310,6 +310,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research1',
             'view_count': 150,
             'download_count': 45,
+            # Dublin Core metadata
+            'publisher': 'สำนักพิมพ์มหาวิทยาลัยเทคโนโลยี',
+            'contributor': 'ผศ.ดร. วิชัย พัฒนา (ที่ปรึกษา)',
+            'format': 'application/pdf',
+            'source': 'https://example.com/research1/original',
+            'language': 'th',
+            'relation': 'https://example.com/research5',
+            'coverage': 'ประเทศไทย; 2023-2024',
+            'rights': 'CC BY-NC-SA 4.0',
             'category_id': 2,  # ปัญญาประดิษฐ์
             'user_id': 2,  # somchai
             'tags': [tags[0], tags[1], tags[2], tags[4]]  # ML, DL, NN, CV
@@ -330,6 +339,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research2',
             'view_count': 89,
             'download_count': 32,
+            # Dublin Core metadata
+            'publisher': 'IEEE Computer Society',
+            'contributor': 'รศ.ดร. วิชัย พัฒนา (ผู้ร่วมวิจัย)',
+            'format': 'application/pdf',
+            'source': 'Proceedings of ICSE 2023',
+            'language': 'en',
+            'relation': 'https://example.com/research6',
+            'coverage': 'สากล; 2022-2023',
+            'rights': 'Copyright © 2023 IEEE',
             'category_id': 3,  # วิศวกรรมซอฟต์แวร์
             'user_id': 3,  # pensri
             'tags': [tags[14], tags[13], tags[11]]  # Agile, DevOps, Web
@@ -350,6 +368,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research3',
             'view_count': 234,
             'download_count': 87,
+            # Dublin Core metadata
+            'publisher': 'Cybersecurity Research Institute',
+            'contributor': 'ดร. สมชาย ใจดี (ผู้ร่วมวิจัย)',
+            'format': 'application/pdf',
+            'source': 'Journal of Cybersecurity Research Vol.18 No.2',
+            'language': 'en',
+            'relation': None,
+            'coverage': 'สากล; 2023-2024',
+            'rights': 'CC BY 4.0',
             'category_id': 4,  # ความมั่นคงปลอดภัย
             'user_id': 5,  # wichai
             'tags': [tags[7], tags[9], tags[5]]  # IoT, Cybersecurity, Big Data
@@ -370,6 +397,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research4',
             'view_count': 178,
             'download_count': 65,
+            # Dublin Core metadata
+            'publisher': 'ACM Digital Library',
+            'contributor': 'รศ.ดร. วิชัย พัฒนา (ผู้ร่วมวิจัย)',
+            'format': 'application/pdf',
+            'source': 'Proceedings of ICBT 2023',
+            'language': 'en',
+            'relation': None,
+            'coverage': 'สากล; 2022-2023',
+            'rights': 'Copyright © 2023 ACM',
             'category_id': 1,  # วิทยาการคอมพิวเตอร์
             'user_id': 3,  # pensri
             'tags': [tags[8], tags[5], tags[20]]  # Blockchain, Big Data, Database
@@ -390,6 +426,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research5',
             'view_count': 312,
             'download_count': 124,
+            # Dublin Core metadata
+            'publisher': 'Asian Academic Press',
+            'contributor': 'มานี ขยัน (ผู้ช่วยวิจัย)',
+            'format': 'application/pdf',
+            'source': 'Asian Journal of Computer Science Vol.25 No.3',
+            'language': 'th',
+            'relation': 'https://example.com/research1',
+            'coverage': 'ประเทศไทย; 2023-2024',
+            'rights': 'CC BY-NC 4.0',
             'category_id': 2,  # ปัญญาประดิษฐ์
             'user_id': 2,  # somchai
             'tags': [tags[3], tags[0], tags[1], tags[16]]  # NLP, ML, DL, Python
@@ -410,6 +455,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research6',
             'view_count': 145,
             'download_count': 56,
+            # Dublin Core metadata
+            'publisher': 'Springer Nature',
+            'contributor': None,
+            'format': 'application/pdf',
+            'source': 'International Journal of Software Engineering Vol.15 No.4',
+            'language': 'en',
+            'relation': 'https://example.com/research2',
+            'coverage': 'สากล; 2022-2023',
+            'rights': 'CC BY 4.0',
             'category_id': 3,  # วิศวกรรมซอฟต์แวร์
             'user_id': 3,  # pensri
             'tags': [tags[15], tags[11], tags[23], tags[18]]  # Microservices, Web, API, JS
@@ -430,6 +484,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research7',
             'view_count': 198,
             'download_count': 78,
+            # Dublin Core metadata
+            'publisher': 'IEEE Xplore',
+            'contributor': None,
+            'format': 'application/pdf',
+            'source': 'Proceedings of ICBD 2024',
+            'language': 'en',
+            'relation': 'https://example.com/research8',
+            'coverage': 'สากล; 2023-2024',
+            'rights': 'Copyright © 2024 IEEE',
             'category_id': 5,  # ฐานข้อมูล
             'user_id': 5,  # wichai
             'tags': [tags[5], tags[0], tags[10], tags[16]]  # Big Data, ML, Data Mining, Python
@@ -450,6 +513,15 @@ def create_researches(users, categories, tags):
             'url': 'https://example.com/research8',
             'view_count': 167,
             'download_count': 61,
+            # Dublin Core metadata
+            'publisher': 'Elsevier',
+            'contributor': None,
+            'format': 'application/pdf',
+            'source': 'Database Systems Journal Vol.20 No.1',
+            'language': 'en',
+            'relation': 'https://example.com/research7',
+            'coverage': 'สากล; 2022-2023',
+            'rights': 'CC BY-NC-ND 4.0',
             'category_id': 5,  # ฐานข้อมูล
             'user_id': 2,  # somchai
             'tags': [tags[22], tags[20], tags[5]]  # NoSQL, Database, Big Data

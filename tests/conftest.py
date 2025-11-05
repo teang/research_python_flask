@@ -123,7 +123,16 @@ def research(db_session, regular_user, category):
         year=2024,
         publication_type='journal',
         user_id=regular_user.id,
-        category_id=category.id
+        category_id=category.id,
+        # Dublin Core metadata
+        publisher='Test Publisher',
+        contributor='Jane Smith (Advisor)',
+        format='application/pdf',
+        source='Test Journal Vol.1 No.1',
+        language='en',
+        relation=None,
+        coverage='Global; 2023-2024',
+        rights='CC BY 4.0'
     )
     db_session.add(research)
     db_session.commit()
