@@ -1,0 +1,46 @@
+# Systemd service file for Research Management System
+# Copy to: /etc/systemd/system/research-app.service
+# Enable: sudo systemctl enable research-app
+# Start: sudo systemctl start research-app
+
+[Unit]
+Description=Research Management System (Flask + Gunicorn)
+After=network.target postgresql.service redis.service
+Wants=postgresql.service redis.service
+
+[Service]
+Type=notify
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/research_python_flask
+Environment="PATH=/var/www/research_python_flask/venv/bin"
+EnvironmentFile=/var/www/research_python_flask/.env
+
+# Main process
+ExecStart=/var/www/research_python_flask/venv/bin/gunicorn \
+    --config /var/www/research_python_flask/gunicorn.conf.py \
+    run:app
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Security
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/www/research_python_flask/app/static/uploads
+ReadWritePaths=/var/www/research_python_flask/logs
+
+# Resource limits
+LimitNOFILE=65536
+LimitNPROC=4096
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=research-app
+
+[Install]
+WantedBy=multi-user.target
