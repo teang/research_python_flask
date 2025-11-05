@@ -119,7 +119,9 @@
 - **Werkzeug** - เข้ารหัสรหัสผ่านและจัดการไฟล์
 
 ### Database
-- **SQLite** - ฐานข้อมูลเริ่มต้น (สามารถเปลี่ยนเป็น PostgreSQL, MySQL ได้)
+- **PostgreSQL** - ฐานข้อมูลหลัก (แนะนำสำหรับ Production)
+- **SQLite** - ฐานข้อมูลสำรอง (สำหรับ Development และทดสอบ)
+- รองรับ **MySQL/MariaDB** - ทางเลือกเพิ่มเติม
 
 ### Frontend
 - **Bootstrap 5** - CSS Framework
@@ -138,6 +140,7 @@
 - **Python** 3.8 หรือสูงกว่า
 - **pip** (Python package manager)
 - **Git** (สำหรับ Clone โปรเจกต์)
+- **PostgreSQL** 12 หรือสูงกว่า (แนะนำ) หรือ SQLite สำหรับ Development
 
 ### ขั้นตอนที่ 1: Clone โปรเจกต์
 
@@ -181,22 +184,104 @@ Package ที่จะถูกติดตั้ง:
 - OpenPyXL
 - และอื่นๆ
 
-### ขั้นตอนที่ 4: ตั้งค่า Environment Variables (ถ้ามี)
+### ขั้นตอนที่ 4: ตั้งค่าฐานข้อมูล PostgreSQL
+
+#### ติดตั้ง PostgreSQL
+
+**บน Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+```
+
+**บน macOS (ใช้ Homebrew):**
+```bash
+brew install postgresql
+brew services start postgresql
+```
+
+**บน Windows:**
+ดาวน์โหลดและติดตั้งจาก [postgresql.org](https://www.postgresql.org/download/windows/)
+
+#### สร้างฐานข้อมูลและผู้ใช้
+
+```bash
+# เข้าสู่ PostgreSQL shell
+sudo -u postgres psql
+
+# สร้างฐานข้อมูล
+CREATE DATABASE research_db;
+
+# สร้างผู้ใช้
+CREATE USER research_user WITH PASSWORD 'your_secure_password';
+
+# ให้สิทธิ์การเข้าถึง
+GRANT ALL PRIVILEGES ON DATABASE research_db TO research_user;
+
+# ออกจาก PostgreSQL shell
+\q
+```
+
+### ขั้นตอนที่ 5: ติดตั้ง PostgreSQL Driver
+
+```bash
+pip install psycopg2-binary
+```
+
+**หมายเหตุ**: สำหรับ Production แนะนำให้ติดตั้ง `psycopg2` แทน `psycopg2-binary`
+
+```bash
+# สำหรับ Production (ต้องติดตั้ง dependencies เพิ่มเติม)
+sudo apt install libpq-dev python3-dev  # Ubuntu/Debian
+pip install psycopg2
+```
+
+### ขั้นตอนที่ 6: ตั้งค่า Environment Variables
 
 ```bash
 # คัดลอกไฟล์ตัวอย่าง
 cp .env.example .env
 
-# แก้ไขไฟล์ .env ตามต้องการ
-# ตัวอย่าง:
-# SECRET_KEY=your-secret-key-here
-# DATABASE_URI=sqlite:///research.db
-# PORT=5000
+# แก้ไขไฟล์ .env
+nano .env  # หรือใช้ text editor ที่ชอบ
 ```
 
-**หมายเหตุ**: ถ้าไม่มีไฟล์ `.env.example` สามารถข้ามขั้นตอนนี้ได้ ระบบจะใช้ค่า Default
+**ตัวอย่างการตั้งค่าใน `.env` สำหรับ PostgreSQL:**
 
-### ขั้นตอนที่ 5: สร้างฐานข้อมูล (ครั้งแรกเท่านั้น)
+```bash
+# Flask Configuration
+FLASK_ENV=development
+SECRET_KEY=your-very-long-secret-key-here
+DEBUG=True
+
+# PostgreSQL Database
+DATABASE_URL=postgresql://research_user:your_secure_password@localhost:5432/research_db
+
+# Server
+PORT=5000
+HOST=0.0.0.0
+
+# Email (Optional)
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USE_TLS=true
+MAIL_USERNAME=your-email@gmail.com
+MAIL_PASSWORD=your-app-password
+```
+
+**สร้าง SECRET_KEY แบบสุ่ม:**
+```bash
+python -c "import secrets; print(secrets.token_hex(32))"
+```
+
+**ทางเลือก: ใช้ SQLite สำหรับ Development**
+
+ถ้าต้องการใช้ SQLite แทน PostgreSQL (สำหรับทดสอบเท่านั้น):
+```bash
+DATABASE_URL=sqlite:///research.db
+```
+
+### ขั้นตอนที่ 7: สร้างตารางในฐานข้อมูล (ครั้งแรกเท่านั้น)
 
 ```bash
 python
@@ -204,6 +289,7 @@ python
 >>> app = create_app()
 >>> with app.app_context():
 ...     db.create_all()
+...     print("Database tables created successfully!")
 ...
 >>> exit()
 ```
@@ -214,7 +300,19 @@ python
 python init_db.py
 ```
 
-### ขั้นตอนที่ 6: รันแอปพลิเคชัน
+**ตรวจสอบว่าตารางถูกสร้างแล้ว:**
+```bash
+# เข้า PostgreSQL shell
+psql -U research_user -d research_db
+
+# แสดงรายการตาราง
+\dt
+
+# ออกจาก shell
+\q
+```
+
+### ขั้นตอนที่ 8: รันแอปพลิเคชัน
 
 ```bash
 python run.py
@@ -222,12 +320,46 @@ python run.py
 
 แอปพลิเคชันจะทำงานที่ `http://localhost:5000`
 
-### ขั้นตอนที่ 7: เปิดเบราว์เซอร์
+### ขั้นตอนที่ 9: เปิดเบราว์เซอร์
 
 เปิดเบราว์เซอร์และเข้าไปที่:
 
 ```
 http://localhost:5000
+```
+
+### สรุปคำสั่งติดตั้งทั้งหมด (Quick Setup)
+
+```bash
+# 1. Clone โปรเจกต์
+git clone <repository-url>
+cd research_python_flask
+
+# 2. สร้าง Virtual Environment
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# หรือ venv\Scripts\activate  # Windows
+
+# 3. ติดตั้ง Dependencies
+pip install -r requirements.txt
+pip install psycopg2-binary  # สำหรับ PostgreSQL
+
+# 4. ตั้งค่า PostgreSQL (ถ้ายังไม่ได้ติดตั้ง)
+sudo -u postgres psql
+# CREATE DATABASE research_db;
+# CREATE USER research_user WITH PASSWORD 'your_password';
+# GRANT ALL PRIVILEGES ON DATABASE research_db TO research_user;
+# \q
+
+# 5. ตั้งค่า Environment Variables
+cp .env.example .env
+nano .env  # แก้ไข DATABASE_URL และ SECRET_KEY
+
+# 6. สร้างตารางในฐานข้อมูล
+python -c "from app import create_app, db; app = create_app(); app.app_context().push(); db.create_all(); print('Done!')"
+
+# 7. รันแอป
+python run.py
 ```
 
 ## 🚀 คู่มือการใช้งาน
@@ -550,11 +682,15 @@ research_python_flask/
 
 ### เปลี่ยนฐานข้อมูล
 
-ระบบรองรับฐานข้อมูลหลายประเภท แก้ไขใน `config.py`:
+ระบบรองรับฐานข้อมูลหลายประเภท โดยตั้งค่าผ่าน Environment Variable `DATABASE_URL` ในไฟล์ `.env`:
 
-#### PostgreSQL
-```python
-SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost:5432/research_db'
+#### PostgreSQL (แนะนำ)
+```bash
+# ในไฟล์ .env
+DATABASE_URL=postgresql://username:password@localhost:5432/research_db
+
+# ตัวอย่างจริง
+DATABASE_URL=postgresql://research_user:myP@ssw0rd@localhost:5432/research_db
 ```
 
 ติดตั้ง psycopg2:
@@ -562,9 +698,21 @@ SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost:5432/researc
 pip install psycopg2-binary
 ```
 
-#### MySQL
-```python
-SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost:3306/research_db'
+**สำหรับ Production:**
+```bash
+# ติดตั้ง dependencies ก่อน
+sudo apt install libpq-dev python3-dev  # Ubuntu/Debian
+# หรือ
+brew install postgresql  # macOS
+
+# จากนั้นติดตั้ง psycopg2
+pip install psycopg2
+```
+
+#### MySQL/MariaDB
+```bash
+# ในไฟล์ .env
+DATABASE_URL=mysql://username:password@localhost:3306/research_db
 ```
 
 ติดตั้ง PyMySQL:
@@ -572,9 +720,36 @@ SQLALCHEMY_DATABASE_URI = 'mysql://username:password@localhost:3306/research_db'
 pip install pymysql
 ```
 
-#### SQLite (Default)
-```python
-SQLALCHEMY_DATABASE_URI = 'sqlite:///research.db'
+#### SQLite (สำหรับ Development เท่านั้น)
+```bash
+# ในไฟล์ .env
+DATABASE_URL=sqlite:///research.db
+```
+
+ไม่ต้องติดตั้ง package เพิ่มเติม (มีใน Python อยู่แล้ว)
+
+**หมายเหตุ**: SQLite ไม่แนะนำสำหรับ Production เนื่องจากข้อจำกัดในเรื่อง Concurrent Access และ Performance
+
+#### PostgreSQL บน Cloud Services
+
+**Heroku Postgres:**
+```bash
+DATABASE_URL=postgres://user:password@host:5432/dbname
+```
+
+**AWS RDS PostgreSQL:**
+```bash
+DATABASE_URL=postgresql://user:password@endpoint.region.rds.amazonaws.com:5432/dbname
+```
+
+**Google Cloud SQL:**
+```bash
+DATABASE_URL=postgresql://user:password@/dbname?host=/cloudsql/project:region:instance
+```
+
+**DigitalOcean Managed Database:**
+```bash
+DATABASE_URL=postgresql://user:password@host:25060/dbname?sslmode=require
 ```
 
 ### เปลี่ยน Secret Key
