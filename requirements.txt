@@ -3,7 +3,7 @@ Flask-SQLAlchemy==3.1.1
 Flask-Login==0.6.3
 Flask-WTF==1.2.1
 WTForms==3.1.1
-email-validator==2.1.0
+email-validator>=2.3.0  # Version 2.1.0 was yanked
 python-dotenv==1.0.0
 Werkzeug==3.0.1
 
@@ -14,19 +14,19 @@ psycopg2-binary==2.9.9  # PostgreSQL adapter (use psycopg2 for production)
 Flask-Migrate==4.0.5
 
 # File handling
-Flask-Uploads==0.2.1
+Flask-Reuploaded==1.4.0  # Replacement for deprecated Flask-Uploads
 
 # Export functionality
 pandas==2.1.4
 openpyxl==3.1.2
-bibtexparser==1.4.1
+# bibtexparser==1.4.3  # Optional - for BibTeX export only. Has compatibility issues with modern setuptools.
 
 # REST API
 Flask-CORS==4.0.0
 Flask-RESTful==0.3.10
 
 # Email notifications
-Flask-Mail==0.9.1
+Flask-Mail==0.10.0
 
 # PDF handling
 PyPDF2==3.0.1
