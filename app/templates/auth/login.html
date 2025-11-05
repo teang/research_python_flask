@@ -1,47 +1,22 @@
-{% extends "base.html" %}
-
-{% block title %}เข้าสู่ระบบ - ระบบจัดเก็บงานวิจัย{% endblock %}
-
+{% extends "frontend/base.html" %}
+{% block title %}เข้าสู่ระบบ{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="bi bi-box-arrow-in-right"></i> เข้าสู่ระบบ</h4>
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-3xl font-kanit font-bold text-center mb-6">เข้าสู่ระบบ</h2>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-4">
+                {{ form.username.label(class="block mb-2") }}
+                {{ form.username(class="w-full px-4 py-2 border rounded-lg") }}
             </div>
-            <div class="card-body">
-                <form method="POST">
-                    {{ form.hidden_tag() }}
-
-                    <div class="mb-3">
-                        {{ form.username.label(class="form-label") }}
-                        {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
-                        {% if form.username.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.username.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.password.label(class="form-label") }}
-                        {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
-                        {% if form.password.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.password.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="d-grid">
-                        {{ form.submit(class="btn btn-primary") }}
-                    </div>
-                </form>
+            <div class="mb-6">
+                {{ form.password.label(class="block mb-2") }}
+                {{ form.password(class="w-full px-4 py-2 border rounded-lg") }}
             </div>
-            <div class="card-footer text-center">
-                ยังไม่มีบัญชี? <a href="{{ url_for('auth.register') }}">ลงทะเบียนที่นี่</a>
-            </div>
-        </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">เข้าสู่ระบบ</button>
+        </form>
+        <p class="mt-4 text-center">ยังไม่มีบัญชี? <a href="{{ url_for('auth.register') }}" class="text-blue-600">ลงทะเบียน</a></p>
     </div>
 </div>
 {% endblock %}

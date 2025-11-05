@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ระบบจัดการงานวิจัย{% endblock %}</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Thai Fonts from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'kanit': ['Kanit', 'sans-serif'],
+                        'sarabun': ['Sarabun', 'sans-serif'],
+                    },
+                    colors: {
+                        'thai-blue': '#1e40af',
+                        'thai-gold': '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Kanit', sans-serif;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 text-white shadow-lg">
+        <div class="container mx-auto px-4">
+            <!-- Top Bar -->
+            <div class="flex justify-between items-center py-2 text-sm border-b border-blue-700">
+                <div class="flex items-center space-x-4">
+                    <span><i class="fas fa-phone mr-2"></i>02-XXX-XXXX</span>
+                    <span><i class="fas fa-envelope mr-2"></i>research@example.ac.th</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    {% if current_user.is_authenticated %}
+                        <span>สวัสดี, {{ current_user.full_name }}</span>
+                        {% if current_user.is_admin %}
+                            <a href="{{ url_for('admin.dashboard') }}" class="hover:text-thai-gold transition"><i class="fas fa-cog mr-1"></i>จัดการระบบ</a>
+                        {% else %}
+                            <a href="{{ url_for('research.my_researches') }}" class="hover:text-thai-gold transition"><i class="fas fa-file-alt mr-1"></i>งานวิจัยของฉัน</a>
+                        {% endif %}
+                        <a href="{{ url_for('auth.logout') }}" class="hover:text-thai-gold transition"><i class="fas fa-sign-out-alt mr-1"></i>ออกจากระบบ</a>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="hover:text-thai-gold transition"><i class="fas fa-sign-in-alt mr-1"></i>เข้าสู่ระบบ</a>
+                        <a href="{{ url_for('auth.register') }}" class="hover:text-thai-gold transition"><i class="fas fa-user-plus mr-1"></i>ลงทะเบียน</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Main Header -->
+            <div class="py-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-5xl">
+                            <i class="fas fa-university"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-3xl font-bold font-kanit">ระบบจัดการงานวิจัย</h1>
+                            <p class="text-blue-200 text-sm">Research Management System</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="bg-blue-800 -mx-4 px-4">
+                <ul class="flex space-x-1">
+                    <li>
+                        <a href="{{ url_for('main.index') }}" class="block px-6 py-3 hover:bg-blue-700 transition {% if request.endpoint == 'main.index' %}bg-blue-700{% endif %}">
+                            <i class="fas fa-home mr-2"></i>หน้าหลัก
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('research.list') }}" class="block px-6 py-3 hover:bg-blue-700 transition {% if request.endpoint and 'research' in request.endpoint %}bg-blue-700{% endif %}">
+                            <i class="fas fa-book mr-2"></i>งานวิจัย
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('research.categories') }}" class="block px-6 py-3 hover:bg-blue-700 transition">
+                            <i class="fas fa-folder mr-2"></i>หมวดหมู่
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.about') }}" class="block px-6 py-3 hover:bg-blue-700 transition">
+                            <i class="fas fa-info-circle mr-2"></i>เกี่ยวกับเรา
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('main.contact') }}" class="block px-6 py-3 hover:bg-blue-700 transition">
+                            <i class="fas fa-envelope mr-2"></i>ติดต่อเรา
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="container mx-auto px-4 mt-4">
+                {% for category, message in messages %}
+                    <div class="p-4 rounded-lg mb-2 {% if category == 'success' %}bg-green-100 text-green-800 border border-green-200{% elif category == 'danger' %}bg-red-100 text-red-800 border border-red-200{% elif category == 'warning' %}bg-yellow-100 text-yellow-800 border border-yellow-200{% else %}bg-blue-100 text-blue-800 border border-blue-200{% endif %}">
+                        <i class="fas fa-info-circle mr-2"></i>{{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white mt-16">
+        <div class="container mx-auto px-4 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-kanit font-bold mb-4">เกี่ยวกับเรา</h3>
+                    <p class="text-gray-300">
+                        ระบบจัดการงานวิจัยออนไลน์ เพื่อการเผยแพร่และสืบค้นงานวิจัยอย่างมีประสิทธิภาพ
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-kanit font-bold mb-4">เมนูลัด</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><a href="{{ url_for('research.list') }}" class="hover:text-thai-gold transition"><i class="fas fa-chevron-right mr-2"></i>งานวิจัยทั้งหมด</a></li>
+                        <li><a href="{{ url_for('research.categories') }}" class="hover:text-thai-gold transition"><i class="fas fa-chevron-right mr-2"></i>หมวดหมู่งานวิจัย</a></li>
+                        <li><a href="{{ url_for('main.about') }}" class="hover:text-thai-gold transition"><i class="fas fa-chevron-right mr-2"></i>เกี่ยวกับเรา</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-kanit font-bold mb-4">ติดต่อเรา</h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li><i class="fas fa-map-marker-alt mr-2"></i>123 ถนนพระราม 1 กรุงเทพฯ 10330</li>
+                        <li><i class="fas fa-phone mr-2"></i>02-XXX-XXXX</li>
+                        <li><i class="fas fa-envelope mr-2"></i>research@example.ac.th</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400">
+                <p>&copy; 2024 ระบบจัดการงานวิจัย. สงวนลิขสิทธิ์.</p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

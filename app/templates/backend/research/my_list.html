@@ -1,0 +1,38 @@
+{% extends "admin/base.html" %}
+{% block page_title %}งานวิจัยของฉัน{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('research.add') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        <i class="fas fa-plus mr-2"></i>เพิ่มงานวิจัย
+    </a>
+</div>
+<div class="bg-white rounded-lg shadow">
+    <table class="w-full">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left">ชื่องานวิจัย</th>
+                <th class="px-6 py-3 text-left">ปี</th>
+                <th class="px-6 py-3 text-left">สถานะ</th>
+                <th class="px-6 py-3 text-left">การกระทำ</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            {% for research in researches.items %}
+            <tr>
+                <td class="px-6 py-4">{{ research.title }}</td>
+                <td class="px-6 py-4">{{ research.year or '-' }}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded text-xs {% if research.status == 'published' %}bg-green-100 text-green-800{% else %}bg-gray-100{% endif %}">
+                        {{ research.status }}
+                    </span>
+                </td>
+                <td class="px-6 py-4">
+                    <a href="{{ url_for('research.edit', id=research.id) }}" class="text-blue-600 hover:underline mr-2">แก้ไข</a>
+                    <a href="{{ url_for('research.view', id=research.id) }}" class="text-green-600 hover:underline">ดู</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

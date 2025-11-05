@@ -1,0 +1,14 @@
+{% extends "admin/base.html" %}
+{% block page_title %}บทบาท: {{ role.name_th }}{% endblock %}
+{% block content %}
+<div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-2xl font-kanit font-bold mb-4">{{ role.name_th }}</h2>
+    <p class="mb-6">{{ role.description }}</p>
+    <h3 class="text-xl font-kanit font-semibold mb-3">สิทธิ์ที่มี</h3>
+    <ul class="space-y-2">
+        {% for permission in role.permissions %}
+        <li><i class="fas fa-check text-green-600 mr-2"></i>{{ permission.name_th }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

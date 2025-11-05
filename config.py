@@ -8,10 +8,16 @@ class Config:
     # Secret Key สำหรับ Session และ CSRF Protection
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'
 
-    # Database Configuration
+    # Database Configuration - PostgreSQL
+    # Format: postgresql://username:password@localhost:5432/database_name
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(os.path.abspath(os.path.dirname(__file__)), 'research.db')
+        'postgresql://postgres:postgres@localhost:5432/research_db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_size': 10,
+        'pool_recycle': 3600,
+        'pool_pre_ping': True,
+    }
 
     # Session Configuration
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)

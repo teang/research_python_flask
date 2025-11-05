@@ -1,0 +1,37 @@
+{% extends "admin/base.html" %}
+{% block page_title %}จัดการหมวดหมู่{% endblock %}
+{% block content %}
+<div class="mb-4">
+    <a href="{{ url_for('admin.add_category') }}" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+        <i class="fas fa-plus mr-2"></i>เพิ่มหมวดหมู่
+    </a>
+</div>
+<div class="bg-white rounded-lg shadow">
+    <table class="w-full">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left">ชื่อหมวดหมู่</th>
+                <th class="px-6 py-3 text-left">จำนวนงานวิจัย</th>
+                <th class="px-6 py-3 text-left">สถานะ</th>
+                <th class="px-6 py-3 text-left">การกระทำ</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            {% for category in categories %}
+            <tr>
+                <td class="px-6 py-4">{{ category.name }}</td>
+                <td class="px-6 py-4">{{ category.research_count }}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 rounded text-xs {% if category.is_active %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        {% if category.is_active %}ใช้งาน{% else %}ปิด{% endif %}
+                    </span>
+                </td>
+                <td class="px-6 py-4">
+                    <a href="{{ url_for('admin.edit_category', id=category.id) }}" class="text-blue-600 hover:underline">แก้ไข</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

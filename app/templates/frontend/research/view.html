@@ -1,0 +1,19 @@
+{% extends "frontend/base.html" %}
+{% block title %}{{ research.title }}{% endblock %}
+{% block content %}
+<div class="bg-white rounded-lg shadow-lg p-8">
+    <h1 class="text-3xl font-kanit font-bold mb-4">{{ research.title }}</h1>
+    {% if research.title_en %}<p class="text-xl text-gray-600 mb-6">{{ research.title_en }}</p>{% endif %}
+    <div class="mb-6">
+        <p><strong>ผู้วิจัย:</strong> {{ research.authors }}</p>
+        <p><strong>ปีที่เผยแพร่:</strong> {{ research.year or '-' }}</p>
+        {% if research.category %}<p><strong>หมวดหมู่:</strong> {{ research.category.name }}</p>{% endif %}
+    </div>
+    {% if research.abstract %}
+    <div class="mb-6">
+        <h2 class="text-2xl font-kanit font-bold mb-2">บทคัดย่อ</h2>
+        <p class="text-gray-700">{{ research.abstract }}</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

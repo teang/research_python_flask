@@ -28,14 +28,23 @@ def create_app(config_name='default'):
         os.makedirs(app.config['UPLOAD_FOLDER'])
 
     # Register Blueprints
-    from app.routes import main_bp, auth_bp, research_bp
+    from app.controllers import main_bp, auth_bp, research_bp, admin_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(research_bp, url_prefix='/research')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
     # สร้างตารางในฐานข้อมูล
     with app.app_context():
         db.create_all()
+
+        # Initialize RBAC (Roles & Permissions)
+        from app.utils import init_rbac
+        init_rbac()
+
+    # Register template filters
+    from app.utils.filters import register_filters
+    register_filters(app)
 
     return app
