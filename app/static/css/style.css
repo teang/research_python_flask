@@ -1,30 +1,30 @@
 /* Modern Professional CSS for ระบบจัดเก็บงานวิจัย */
 
 /* ========================================
-   CSS Variables - Professional Color Palette
+   CSS Variables - TARR Agricultural Research Style
    ======================================== */
 :root {
-    /* Primary Brand Colors - Professional Blue */
-    --color-primary-50: #eff6ff;
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #3b82f6;
-    --color-primary-600: #2563eb;
-    --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
-    --color-primary-900: #1e3a8a;
+    /* Primary Brand Colors - Agricultural Green */
+    --color-primary-50: #f0fdf4;
+    --color-primary-100: #dcfce7;
+    --color-primary-200: #bbf7d0;
+    --color-primary-300: #86efac;
+    --color-primary-400: #4ade80;
+    --color-primary-500: #22c55e;
+    --color-primary-600: #16a34a;
+    --color-primary-700: #15803d;
+    --color-primary-800: #166534;
+    --color-primary-900: #14532d;
 
-    /* Accent Colors - Trustworthy Teal */
-    --color-accent-50: #f0fdfa;
-    --color-accent-100: #ccfbf1;
-    --color-accent-200: #99f6e4;
-    --color-accent-300: #5eead4;
-    --color-accent-400: #2dd4bf;
-    --color-accent-500: #14b8a6;
-    --color-accent-600: #0d9488;
-    --color-accent-700: #0f766e;
+    /* Accent Colors - Earth Brown/Gold */
+    --color-accent-50: #fffbeb;
+    --color-accent-100: #fef3c7;
+    --color-accent-200: #fde68a;
+    --color-accent-300: #fcd34d;
+    --color-accent-400: #fbbf24;
+    --color-accent-500: #f59e0b;
+    --color-accent-600: #d97706;
+    --color-accent-700: #b45309;
 
     /* Neutral Colors */
     --color-gray-50: #f9fafb;
@@ -153,22 +153,22 @@ a, button, .btn, .card, input, textarea, select {
 }
 
 /* ========================================
-   Custom Gradient Backgrounds
+   Custom Gradient Backgrounds - Agricultural Theme
    ======================================== */
 .gradient-primary {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
 }
 
 .gradient-success {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
 }
 
-.gradient-ocean {
-    background: linear-gradient(135deg, #2563eb 0%, #0d9488 100%);
+.gradient-earth {
+    background: linear-gradient(135deg, #16a34a 0%, #84cc16 100%);
 }
 
-.gradient-sunset {
-    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+.gradient-gold {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
 }
 
 /* ========================================
