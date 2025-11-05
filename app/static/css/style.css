@@ -5,6 +5,11 @@ body {
     font-family: 'Sarabun', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Kanit สำหรับหัวข้อใหญ่ */
+h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Kanit', sans-serif;
+}
+
 /* Additional custom styles that work with Tailwind CSS */
 /* These styles complement Tailwind and provide additional customization */
 
