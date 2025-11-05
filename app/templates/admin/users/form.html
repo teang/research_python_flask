@@ -1,0 +1,23 @@
+{% extends "admin/base.html" %}
+{% block page_title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="bg-white rounded-lg shadow p-6">
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>{{ form.username.label(class="block mb-2") }}{{ form.username(class="w-full px-4 py-2 border rounded-lg") }}</div>
+            <div>{{ form.email.label(class="block mb-2") }}{{ form.email(class="w-full px-4 py-2 border rounded-lg") }}</div>
+        </div>
+        <div class="mb-4">{{ form.full_name.label(class="block mb-2") }}{{ form.full_name(class="w-full px-4 py-2 border rounded-lg") }}</div>
+        <div class="mb-4">{{ form.roles.label(class="block mb-2") }}{{ form.roles(class="w-full px-4 py-2 border rounded-lg", multiple=true) }}</div>
+        {% if not user %}
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>{{ form.password.label(class="block mb-2") }}{{ form.password(class="w-full px-4 py-2 border rounded-lg") }}</div>
+            <div>{{ form.confirm_password.label(class="block mb-2") }}{{ form.confirm_password(class="w-full px-4 py-2 border rounded-lg") }}</div>
+        </div>
+        {% endif %}
+        <div class="mb-4">{{ form.is_active() }} {{ form.is_active.label() }}</div>
+        <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">บันทึก</button>
+    </form>
+</div>
+{% endblock %}

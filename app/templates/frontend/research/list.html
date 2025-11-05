@@ -1,0 +1,19 @@
+{% extends "frontend/base.html" %}
+{% block title %}งานวิจัยทั้งหมด{% endblock %}
+{% block content %}
+<h1 class="text-4xl font-kanit font-bold mb-6">งานวิจัยทั้งหมด</h1>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for research in researches.items %}
+    <div class="bg-white rounded-lg shadow hover:shadow-lg transition p-6">
+        <h3 class="font-kanit font-semibold text-lg mb-2">
+            <a href="{{ url_for('research.view', id=research.id) }}" class="hover:text-blue-600">{{ research.title }}</a>
+        </h3>
+        <p class="text-sm text-gray-600 mb-3">{{ research.authors }}</p>
+        <div class="flex justify-between text-xs text-gray-500">
+            <span><i class="fas fa-calendar mr-1"></i>{{ research.year or '-' }}</span>
+            <span><i class="fas fa-eye mr-1"></i>{{ research.view_count }}</span>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

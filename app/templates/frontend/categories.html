@@ -1,0 +1,16 @@
+{% extends "frontend/base.html" %}
+{% block title %}หมวดหมู่งานวิจัย{% endblock %}
+{% block content %}
+<h1 class="text-4xl font-kanit font-bold mb-6">หมวดหมู่งานวิจัย</h1>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+    {% for category in categories %}
+    <a href="{{ url_for('research.list', category=category.id) }}" class="bg-white p-6 rounded-lg shadow hover:shadow-lg transition text-center">
+        <div class="text-4xl mb-3" style="color: {{ category.color or '#3B82F6' }}">
+            <i class="fas {{ category.icon or 'fa-folder' }}"></i>
+        </div>
+        <h3 class="font-kanit font-semibold text-lg">{{ category.name }}</h3>
+        <p class="text-sm text-gray-500">{{ category.research_count }} งาน</p>
+    </a>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "admin/base.html" %}
+{% block page_title %}บทบาทและสิทธิ์{% endblock %}
+{% block content %}
+<div class="bg-white rounded-lg shadow">
+    <table class="w-full">
+        <thead class="bg-gray-50">
+            <tr>
+                <th class="px-6 py-3 text-left">ชื่อบทบาท</th>
+                <th class="px-6 py-3 text-left">คำอธิบาย</th>
+                <th class="px-6 py-3 text-left">จำนวนผู้ใช้</th>
+                <th class="px-6 py-3 text-left">การกระทำ</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y">
+            {% for role in roles %}
+            <tr>
+                <td class="px-6 py-4">{{ role.name_th }}</td>
+                <td class="px-6 py-4">{{ role.description }}</td>
+                <td class="px-6 py-4">{{ role.users.count() }}</td>
+                <td class="px-6 py-4">
+                    <a href="{{ url_for('admin.view_role', id=role.id) }}" class="text-blue-600 hover:underline">ดูรายละเอียด</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
