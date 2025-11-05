@@ -3,73 +3,73 @@
 {% block title %}ลงทะเบียน - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0"><i class="fas fa-user-plus"></i> ลงทะเบียนผู้ใช้ใหม่</h4>
+<div class="flex justify-center">
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-green-600 text-white px-6 py-4">
+                <h4 class="text-xl font-semibold"><i class="fas fa-user-plus mr-2"></i> ลงทะเบียนผู้ใช้ใหม่</h4>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 <form method="POST">
                     {{ form.hidden_tag() }}
 
-                    <div class="mb-3">
-                        {{ form.username.label(class="form-label") }}
-                        {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                    <div class="mb-4">
+                        {{ form.username.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.username(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" + (" border-red-500" if form.username.errors else " border-gray-300")) }}
                         {% if form.username.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.username.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="mb-3">
-                        {{ form.email.label(class="form-label") }}
-                        {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                    <div class="mb-4">
+                        {{ form.email.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.email(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" + (" border-red-500" if form.email.errors else " border-gray-300")) }}
                         {% if form.email.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.email.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="mb-3">
-                        {{ form.full_name.label(class="form-label") }}
-                        {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else "")) }}
+                    <div class="mb-4">
+                        {{ form.full_name.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.full_name(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" + (" border-red-500" if form.full_name.errors else " border-gray-300")) }}
                         {% if form.full_name.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.full_name.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="mb-3">
-                        {{ form.password.label(class="form-label") }}
-                        {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                    <div class="mb-4">
+                        {{ form.password.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.password(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" + (" border-red-500" if form.password.errors else " border-gray-300")) }}
                         {% if form.password.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.password.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="mb-3">
-                        {{ form.confirm_password.label(class="form-label") }}
-                        {{ form.confirm_password(class="form-control" + (" is-invalid" if form.confirm_password.errors else "")) }}
+                    <div class="mb-6">
+                        {{ form.confirm_password.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.confirm_password(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" + (" border-red-500" if form.confirm_password.errors else " border-gray-300")) }}
                         {% if form.confirm_password.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.confirm_password.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="d-grid">
-                        {{ form.submit(class="btn btn-success") }}
+                    <div class="w-full">
+                        {{ form.submit(class="w-full bg-green-600 text-white font-semibold py-3 rounded-lg hover:bg-green-700 transition cursor-pointer") }}
                     </div>
                 </form>
             </div>
-            <div class="card-footer text-center">
-                มีบัญชีอยู่แล้ว? <a href="{{ url_for('auth.login') }}">เข้าสู่ระบบที่นี่</a>
+            <div class="bg-gray-50 px-6 py-4 text-center border-t border-gray-200">
+                <span class="text-gray-600">มีบัญชีอยู่แล้ว?</span> <a href="{{ url_for('auth.login') }}" class="text-green-600 hover:text-green-800 font-medium">เข้าสู่ระบบที่นี่</a>
             </div>
         </div>
     </div>

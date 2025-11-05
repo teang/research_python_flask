@@ -3,39 +3,39 @@
 {% block title %}{{ title }} - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0"><i class="bi bi-folder-plus"></i> {{ title }}</h4>
+<div class="flex justify-center">
+    <div class="w-full max-w-2xl">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-green-600 text-white px-6 py-4">
+                <h4 class="text-xl font-semibold"><i class="fas fa-folder-plus mr-2"></i> {{ title }}</h4>
             </div>
-            <div class="card-body">
+            <div class="p-6">
                 <form method="POST">
                     {{ form.hidden_tag() }}
 
-                    <div class="mb-3">
-                        {{ form.name.label(class="form-label") }} <span class="text-danger">*</span>
-                        {{ form.name(class="form-control" + (" is-invalid" if form.name.errors else "")) }}
+                    <div class="mb-4">
+                        {{ form.name.label(class="block text-gray-700 font-medium mb-2") }} <span class="text-red-600">*</span>
+                        {{ form.name(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" + (" border-red-500" if form.name.errors else " border-gray-300")) }}
                         {% if form.name.errors %}
-                            <div class="invalid-feedback">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.name.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="mb-3">
-                        {{ form.description.label(class="form-label") }}
-                        {{ form.description(class="form-control", rows="4") }}
+                    <div class="mb-6">
+                        {{ form.description.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.description(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 resize-y", rows="4") }}
                         {% if form.description.errors %}
-                            <div class="invalid-feedback d-block">
+                            <div class="text-red-600 text-sm mt-1">
                                 {% for error in form.description.errors %}{{ error }}{% endfor %}
                             </div>
                         {% endif %}
                     </div>
 
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ url_for('research.categories') }}" class="btn btn-secondary">ยกเลิก</a>
-                        {{ form.submit(class="btn btn-success") }}
+                    <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                        <a href="{{ url_for('research.categories') }}" class="px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition text-center">ยกเลิก</a>
+                        {{ form.submit(class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition cursor-pointer") }}
                     </div>
                 </form>
             </div>

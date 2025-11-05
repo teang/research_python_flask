@@ -3,102 +3,93 @@
 {% block title %}งานวิจัยทั้งหมด - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h1><i class="fas fa-book"></i> งานวิจัยทั้งหมด</h1>
-        <hr>
-    </div>
+<div class="w-full mb-6">
+    <h1 class="text-3xl font-bold text-gray-800"><i class="fas fa-book mr-2"></i> งานวิจัยทั้งหมด</h1>
+    <hr class="mt-4 border-gray-300">
 </div>
 
-<div class="row mb-4">
-    <div class="col-md-8">
-        <form method="GET" action="{{ url_for('research.list') }}" class="row g-3">
-            <div class="col-md-8">
-                <input type="text" name="search" class="form-control" placeholder="ค้นหางานวิจัย..."
-                       value="{{ search }}">
-            </div>
-            <div class="col-md-4">
-                <button type="submit" class="btn btn-primary w-100">
-                    <i class="fas fa-search"></i> ค้นหา
-                </button>
-            </div>
+<div class="flex flex-col md:flex-row gap-4 mb-6">
+    <div class="flex-1">
+        <form method="GET" action="{{ url_for('research.list') }}" class="flex gap-2">
+            <input type="text" name="search" class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="ค้นหางานวิจัย..." value="{{ search }}">
+            <button type="submit" class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                <i class="fas fa-search mr-1"></i> ค้นหา
+            </button>
         </form>
     </div>
-    <div class="col-md-4 text-end">
+    <div>
         {% if current_user.is_authenticated %}
-        <a href="{{ url_for('research.add') }}" class="btn btn-success">
-            <i class="fas fa-plus-circle"></i> เพิ่มงานวิจัย
+        <a href="{{ url_for('research.add') }}" class="inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+            <i class="fas fa-plus-circle mr-1"></i> เพิ่มงานวิจัย
         </a>
         {% endif %}
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="card">
-            <div class="card-header">
-                <strong>หมวดหมู่</strong>
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gray-100 px-4 py-3 border-b border-gray-200">
+                <strong class="text-gray-800">หมวดหมู่</strong>
             </div>
-            <div class="list-group list-group-flush">
-                <a href="{{ url_for('research.list') }}"
-                   class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
+            <div class="divide-y divide-gray-200">
+                <a href="{{ url_for('research.list') }}" class="block px-4 py-3 hover:bg-gray-50 transition {% if not selected_category %}bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-600{% else %}text-gray-700{% endif %}">
                     ทั้งหมด
                 </a>
                 {% for category in categories %}
-                <a href="{{ url_for('research.list', category=category.id) }}"
-                   class="list-group-item list-group-item-action {% if selected_category == category.id %}active{% endif %}">
-                    {{ category.name }}
-                    <span class="badge bg-secondary float-end">{{ category.researches|length }}</span>
+                <a href="{{ url_for('research.list', category=category.id) }}" class="block px-4 py-3 hover:bg-gray-50 transition {% if selected_category == category.id %}bg-blue-50 text-blue-700 font-medium border-l-4 border-blue-600{% else %}text-gray-700{% endif %}">
+                    <span class="flex items-center justify-between">
+                        <span>{{ category.name }}</span>
+                        <span class="bg-gray-200 text-gray-700 text-xs font-semibold px-2 py-1 rounded-full">{{ category.researches|length }}</span>
+                    </span>
                 </a>
                 {% endfor %}
             </div>
         </div>
     </div>
 
-    <div class="col-md-9">
+    <div class="lg:col-span-3">
         {% if researches.items %}
-            {% for research in researches.items %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="{{ url_for('research.view', id=research.id) }}" class="text-decoration-none">
+            <div class="space-y-4">
+                {% for research in researches.items %}
+                <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition">
+                    <h5 class="text-xl font-semibold mb-2">
+                        <a href="{{ url_for('research.view', id=research.id) }}" class="text-blue-600 hover:text-blue-800">
                             {{ research.title }}
                         </a>
                     </h5>
                     {% if research.title_en %}
-                    <h6 class="card-subtitle mb-2 text-muted">{{ research.title_en }}</h6>
+                    <h6 class="text-base text-gray-500 mb-3">{{ research.title_en }}</h6>
                     {% endif %}
-                    <p class="card-text">
-                        <small class="text-muted">
-                            <i class="fas fa-user"></i> {{ research.authors }} |
-                            <i class="fas fa-calendar-alt"></i> {{ research.year or 'ไม่ระบุปี' }}
-                            {% if research.category %}
-                            | <i class="fas fa-folder"></i> {{ research.category.name }}
-                            {% endif %}
-                            {% if research.publication_type %}
-                            | <i class="fas fa-bookmark"></i> {{ research.publication_type }}
-                            {% endif %}
-                        </small>
+                    <p class="text-sm text-gray-600 mb-3">
+                        <i class="fas fa-user mr-1"></i> {{ research.authors }} |
+                        <i class="fas fa-calendar-alt mr-1"></i> {{ research.year or 'ไม่ระบุปี' }}
+                        {% if research.category %}
+                        | <i class="fas fa-folder mr-1"></i> {{ research.category.name }}
+                        {% endif %}
+                        {% if research.publication_type %}
+                        | <i class="fas fa-bookmark mr-1"></i> {{ research.publication_type }}
+                        {% endif %}
                     </p>
                     {% if research.abstract %}
-                    <p class="card-text">{{ research.abstract[:300] }}{% if research.abstract|length > 300 %}...{% endif %}</p>
+                    <p class="text-gray-700 mb-3">{{ research.abstract[:300] }}{% if research.abstract|length > 300 %}...{% endif %}</p>
                     {% endif %}
                     {% if research.keywords %}
-                    <p class="card-text">
-                        <small><strong>คำสำคัญ:</strong> {{ research.keywords }}</small>
+                    <p class="text-sm">
+                        <strong class="text-gray-700">คำสำคัญ:</strong> <span class="text-gray-600">{{ research.keywords }}</span>
                     </p>
                     {% endif %}
                 </div>
+                {% endfor %}
             </div>
-            {% endfor %}
 
             <!-- Pagination -->
             {% if researches.pages > 1 %}
-            <nav>
-                <ul class="pagination justify-content-center">
+            <nav class="mt-6">
+                <ul class="flex justify-center items-center gap-1">
                     {% if researches.has_prev %}
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url_for('research.list', page=researches.prev_num, category=selected_category, search=search) }}">
+                    <li>
+                        <a href="{{ url_for('research.list', page=researches.prev_num, category=selected_category, search=search) }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition">
                             ก่อนหน้า
                         </a>
                     </li>
@@ -106,19 +97,21 @@
 
                     {% for page_num in researches.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
                         {% if page_num %}
-                            <li class="page-item {% if page_num == researches.page %}active{% endif %}">
-                                <a class="page-link" href="{{ url_for('research.list', page=page_num, category=selected_category, search=search) }}">
+                            <li>
+                                <a href="{{ url_for('research.list', page=page_num, category=selected_category, search=search) }}" class="px-4 py-2 border rounded-lg transition {% if page_num == researches.page %}bg-blue-600 text-white border-blue-600{% else %}bg-white border-gray-300 text-gray-700 hover:bg-gray-50{% endif %}">
                                     {{ page_num }}
                                 </a>
                             </li>
                         {% else %}
-                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                            <li>
+                                <span class="px-4 py-2 text-gray-400">...</span>
+                            </li>
                         {% endif %}
                     {% endfor %}
 
                     {% if researches.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="{{ url_for('research.list', page=researches.next_num, category=selected_category, search=search) }}">
+                    <li>
+                        <a href="{{ url_for('research.list', page=researches.next_num, category=selected_category, search=search) }}" class="px-4 py-2 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 text-gray-700 transition">
                             ถัดไป
                         </a>
                     </li>
@@ -127,8 +120,10 @@
             </nav>
             {% endif %}
         {% else %}
-        <div class="alert alert-info">
-            <i class="fas fa-info-circle"></i> ไม่พบงานวิจัย
+        <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
+            <p class="flex items-center">
+                <i class="fas fa-info-circle mr-2"></i> ไม่พบงานวิจัย
+            </p>
         </div>
         {% endif %}
     </div>

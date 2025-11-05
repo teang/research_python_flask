@@ -3,147 +3,145 @@
 {% block title %}{{ title }} - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">หน้าแรก</a></li>
-                <li class="breadcrumb-item"><a href="{{ url_for('research.list') }}">งานวิจัย</a></li>
-                <li class="breadcrumb-item active">{{ title }}</li>
-            </ol>
-        </nav>
-    </div>
+<div class="w-full mb-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="flex space-x-2 text-gray-600">
+            <li><a href="{{ url_for('main.index') }}" class="hover:text-blue-600">หน้าแรก</a></li>
+            <li class="before:content-['/'] before:mx-2">
+                <a href="{{ url_for('research.list') }}" class="hover:text-blue-600">งานวิจัย</a>
+            </li>
+            <li class="before:content-['/'] before:mx-2 text-gray-500">{{ title }}</li>
+        </ol>
+    </nav>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="bi bi-pencil"></i> {{ title }}</h4>
-            </div>
-            <div class="card-body">
-                <form method="POST">
-                    {{ form.hidden_tag() }}
+<div class="w-full">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-blue-600 text-white px-6 py-4">
+            <h4 class="text-xl font-semibold"><i class="fas fa-pencil-alt mr-2"></i> {{ title }}</h4>
+        </div>
+        <div class="p-6">
+            <form method="POST">
+                {{ form.hidden_tag() }}
 
-                    <h5 class="mb-3">ข้อมูลพื้นฐาน</h5>
+                <h5 class="text-xl font-semibold text-gray-800 mb-4">ข้อมูลพื้นฐาน</h5>
 
-                    <div class="mb-3">
-                        {{ form.title.label(class="form-label") }} <span class="text-danger">*</span>
-                        {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
-                        {% if form.title.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.title.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.title_en.label(class="form-label") }}
-                        {{ form.title_en(class="form-control" + (" is-invalid" if form.title_en.errors else "")) }}
-                        {% if form.title_en.errors %}
-                            <div class="invalid-feedback">
-                                {% for error in form.title_en.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.authors.label(class="form-label") }} <span class="text-danger">*</span>
-                        {{ form.authors(class="form-control", rows="3") }}
-                        <small class="form-text text-muted">{{ form.authors.description }}</small>
-                        {% if form.authors.errors %}
-                            <div class="invalid-feedback d-block">
-                                {% for error in form.authors.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.abstract.label(class="form-label") }}
-                        {{ form.abstract(class="form-control", rows="6") }}
-                        {% if form.abstract.errors %}
-                            <div class="invalid-feedback d-block">
-                                {% for error in form.abstract.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <div class="mb-3">
-                        {{ form.keywords.label(class="form-label") }}
-                        {{ form.keywords(class="form-control") }}
-                        <small class="form-text text-muted">{{ form.keywords.description }}</small>
-                        {% if form.keywords.errors %}
-                            <div class="invalid-feedback d-block">
-                                {% for error in form.keywords.errors %}{{ error }}{% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
-
-                    <hr>
-                    <h5 class="mb-3">ข้อมูลการตีพิมพ์</h5>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            {{ form.publication_type.label(class="form-label") }}
-                            {{ form.publication_type(class="form-select") }}
+                <div class="mb-4">
+                    {{ form.title.label(class="block text-gray-700 font-medium mb-2") }} <span class="text-red-600">*</span>
+                    {{ form.title(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" + (" border-red-500" if form.title.errors else " border-gray-300")) }}
+                    {% if form.title.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {% for error in form.title.errors %}{{ error }}{% endfor %}
                         </div>
-                        <div class="col-md-6 mb-3">
-                            {{ form.year.label(class="form-label") }}
-                            {{ form.year(class="form-control", type="number") }}
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.title_en.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.title_en(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" + (" border-red-500" if form.title_en.errors else " border-gray-300")) }}
+                    {% if form.title_en.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {% for error in form.title_en.errors %}{{ error }}{% endfor %}
                         </div>
-                    </div>
+                    {% endif %}
+                </div>
 
-                    <div class="mb-3">
-                        {{ form.journal_name.label(class="form-label") }}
-                        {{ form.journal_name(class="form-control") }}
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            {{ form.volume.label(class="form-label") }}
-                            {{ form.volume(class="form-control") }}
+                <div class="mb-4">
+                    {{ form.authors.label(class="block text-gray-700 font-medium mb-2") }} <span class="text-red-600">*</span>
+                    {{ form.authors(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y" + (" border-red-500" if form.authors.errors else " border-gray-300"), rows="3") }}
+                    <small class="text-gray-500 text-sm">{{ form.authors.description }}</small>
+                    {% if form.authors.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {% for error in form.authors.errors %}{{ error }}{% endfor %}
                         </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.issue.label(class="form-label") }}
-                            {{ form.issue(class="form-control") }}
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.abstract.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.abstract(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-y" + (" border-red-500" if form.abstract.errors else " border-gray-300"), rows="6") }}
+                    {% if form.abstract.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {% for error in form.abstract.errors %}{{ error }}{% endfor %}
                         </div>
-                        <div class="col-md-4 mb-3">
-                            {{ form.pages.label(class="form-label") }}
-                            {{ form.pages(class="form-control") }}
-                            <small class="form-text text-muted">{{ form.pages.description }}</small>
+                    {% endif %}
+                </div>
+
+                <div class="mb-6">
+                    {{ form.keywords.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.keywords(class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" + (" border-red-500" if form.keywords.errors else " border-gray-300")) }}
+                    <small class="text-gray-500 text-sm">{{ form.keywords.description }}</small>
+                    {% if form.keywords.errors %}
+                        <div class="text-red-600 text-sm mt-1">
+                            {% for error in form.keywords.errors %}{{ error }}{% endfor %}
                         </div>
-                    </div>
+                    {% endif %}
+                </div>
 
-                    <hr>
-                    <h5 class="mb-3">ข้อมูลเพิ่มเติม</h5>
+                <hr class="my-6 border-gray-300">
+                <h5 class="text-xl font-semibold text-gray-800 mb-4">ข้อมูลการตีพิมพ์</h5>
 
-                    <div class="mb-3">
-                        {{ form.category_id.label(class="form-label") }}
-                        {{ form.category_id(class="form-select") }}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        {{ form.publication_type.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.publication_type(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
                     </div>
+                    <div>
+                        {{ form.year.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.year(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", type="number") }}
+                    </div>
+                </div>
 
-                    <div class="mb-3">
-                        {{ form.doi.label(class="form-label") }}
-                        {{ form.doi(class="form-control") }}
-                    </div>
+                <div class="mb-4">
+                    {{ form.journal_name.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.journal_name(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                </div>
 
-                    <div class="mb-3">
-                        {{ form.url.label(class="form-label") }}
-                        {{ form.url(class="form-control", type="url") }}
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    <div>
+                        {{ form.volume.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.volume(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
                     </div>
+                    <div>
+                        {{ form.issue.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.issue(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                    </div>
+                    <div>
+                        {{ form.pages.label(class="block text-gray-700 font-medium mb-2") }}
+                        {{ form.pages(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                        <small class="text-gray-500 text-sm">{{ form.pages.description }}</small>
+                    </div>
+                </div>
 
-                    <div class="mb-3">
-                        {{ form.file_path.label(class="form-label") }}
-                        {{ form.file_path(class="form-control") }}
-                    </div>
+                <hr class="my-6 border-gray-300">
+                <h5 class="text-xl font-semibold text-gray-800 mb-4">ข้อมูลเพิ่มเติม</h5>
 
-                    <hr>
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{{ url_for('research.list') }}" class="btn btn-secondary">ยกเลิก</a>
-                        {{ form.submit(class="btn btn-primary") }}
-                    </div>
-                </form>
-            </div>
+                <div class="mb-4">
+                    {{ form.category_id.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.category_id(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.doi.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.doi(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                </div>
+
+                <div class="mb-4">
+                    {{ form.url.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.url(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", type="url") }}
+                </div>
+
+                <div class="mb-6">
+                    {{ form.file_path.label(class="block text-gray-700 font-medium mb-2") }}
+                    {{ form.file_path(class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500") }}
+                </div>
+
+                <hr class="my-6 border-gray-300">
+                <div class="flex flex-col sm:flex-row gap-3 justify-end">
+                    <a href="{{ url_for('research.list') }}" class="px-6 py-2 bg-gray-500 text-white font-semibold rounded-lg hover:bg-gray-600 transition text-center">ยกเลิก</a>
+                    {{ form.submit(class="px-6 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition cursor-pointer") }}
+                </div>
+            </form>
         </div>
     </div>
 </div>

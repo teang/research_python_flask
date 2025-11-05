@@ -3,130 +3,138 @@
 {% block title %}{{ research.title }} - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">หน้าแรก</a></li>
-                <li class="breadcrumb-item"><a href="{{ url_for('research.list') }}">งานวิจัย</a></li>
-                <li class="breadcrumb-item active">{{ research.title[:50] }}...</li>
-            </ol>
-        </nav>
-    </div>
+<div class="w-full mb-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="flex space-x-2 text-gray-600">
+            <li><a href="{{ url_for('main.index') }}" class="hover:text-blue-600">หน้าแรก</a></li>
+            <li class="before:content-['/'] before:mx-2">
+                <a href="{{ url_for('research.list') }}" class="hover:text-blue-600">งานวิจัย</a>
+            </li>
+            <li class="before:content-['/'] before:mx-2 text-gray-500">{{ research.title[:50] }}...</li>
+        </ol>
+    </nav>
 </div>
 
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="fas fa-file-alt"></i> รายละเอียดงานวิจัย</h4>
-            </div>
-            <div class="card-body">
-                <h2>{{ research.title }}</h2>
-                {% if research.title_en %}
-                <h5 class="text-muted">{{ research.title_en }}</h5>
-                {% endif %}
-                <hr>
+<div class="w-full">
+    <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-blue-600 text-white px-6 py-4">
+            <h4 class="text-xl font-semibold"><i class="fas fa-file-alt mr-2"></i> รายละเอียดงานวิจัย</h4>
+        </div>
+        <div class="p-6">
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">{{ research.title }}</h2>
+            {% if research.title_en %}
+            <h5 class="text-xl text-gray-500 mb-4">{{ research.title_en }}</h5>
+            {% endif %}
+            <hr class="mb-6 border-gray-300">
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <strong><i class="fas fa-user"></i> ผู้วิจัย:</strong><br>
-                        {{ research.authors }}
-                    </div>
-                    <div class="col-md-3">
-                        <strong><i class="fas fa-calendar-alt"></i> ปีที่เผยแพร่:</strong><br>
-                        {{ research.year or 'ไม่ระบุ' }}
-                    </div>
-                    <div class="col-md-3">
-                        <strong><i class="fas fa-folder"></i> หมวดหมู่:</strong><br>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-user mr-2"></i> ผู้วิจัย:</strong>
+                    <p class="text-gray-600 mt-1">{{ research.authors }}</p>
+                </div>
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-calendar-alt mr-2"></i> ปีที่เผยแพร่:</strong>
+                    <p class="text-gray-600 mt-1">{{ research.year or 'ไม่ระบุ' }}</p>
+                </div>
+                <div>
+                    <strong class="text-gray-700 flex items-center"><i class="fas fa-folder mr-2"></i> หมวดหมู่:</strong>
+                    <p class="text-gray-600 mt-1">
                         {% if research.category %}
-                            <a href="{{ url_for('research.list', category=research.category.id) }}">
+                            <a href="{{ url_for('research.list', category=research.category.id) }}" class="text-blue-600 hover:text-blue-800">
                                 {{ research.category.name }}
                             </a>
                         {% else %}
                             ไม่ระบุ
                         {% endif %}
-                    </div>
+                    </p>
                 </div>
+            </div>
 
-                {% if research.publication_type %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-bookmark"></i> ประเภทการตีพิมพ์:</strong><br>
-                    {{ research.publication_type }}
-                </div>
-                {% endif %}
+            {% if research.publication_type %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center"><i class="fas fa-bookmark mr-2"></i> ประเภทการตีพิมพ์:</strong>
+                <p class="text-gray-600 mt-1">{{ research.publication_type }}</p>
+            </div>
+            {% endif %}
 
-                {% if research.journal_name %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-newspaper"></i> วารสาร/การประชุม:</strong><br>
+            {% if research.journal_name %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center"><i class="fas fa-newspaper mr-2"></i> วารสาร/การประชุม:</strong>
+                <p class="text-gray-600 mt-1">
                     {{ research.journal_name }}
                     {% if research.volume %} (เล่ม {{ research.volume }}{% endif %}
                     {% if research.issue %}, ฉบับ {{ research.issue }}{% endif %}
                     {% if research.pages %}, หน้า {{ research.pages }}{% endif %}
                     {% if research.volume or research.issue or research.pages %}){% endif %}
-                </div>
-                {% endif %}
-
-                {% if research.abstract %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-align-left"></i> บทคัดย่อ:</strong><br>
-                    <p class="text-justify">{{ research.abstract }}</p>
-                </div>
-                {% endif %}
-
-                {% if research.keywords %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-tags"></i> คำสำคัญ:</strong><br>
-                    {% for keyword in research.keywords.split(',') %}
-                        <span class="badge bg-info text-dark me-1">{{ keyword.strip() }}</span>
-                    {% endfor %}
-                </div>
-                {% endif %}
-
-                {% if research.doi %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-link"></i> DOI:</strong><br>
-                    <a href="https://doi.org/{{ research.doi }}" target="_blank">{{ research.doi }}</a>
-                </div>
-                {% endif %}
-
-                {% if research.url %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-globe"></i> URL:</strong><br>
-                    <a href="{{ research.url }}" target="_blank">{{ research.url }}</a>
-                </div>
-                {% endif %}
-
-                {% if research.file_path %}
-                <div class="mb-3">
-                    <strong><i class="fas fa-file-pdf"></i> ไฟล์:</strong><br>
-                    {{ research.file_path }}
-                </div>
-                {% endif %}
-
-                <hr>
-                <small class="text-muted">
-                    <i class="fas fa-user-circle"></i> เพิ่มโดย: {{ research.uploader.full_name or research.uploader.username }} |
-                    <i class="fas fa-clock"></i> เพิ่มเมื่อ: {{ research.created_at.strftime('%d/%m/%Y %H:%M') }}
-                    {% if research.updated_at != research.created_at %}
-                    | <i class="fas fa-edit"></i> แก้ไขล่าสุด: {{ research.updated_at.strftime('%d/%m/%Y %H:%M') }}
-                    {% endif %}
-                </small>
-            </div>
-            {% if current_user.is_authenticated and (current_user.id == research.user_id or current_user.is_admin) %}
-            <div class="card-footer">
-                <a href="{{ url_for('research.edit', id=research.id) }}" class="btn btn-warning">
-                    <i class="fas fa-edit"></i> แก้ไข
-                </a>
-                <form method="POST" action="{{ url_for('research.delete', id=research.id) }}" style="display: inline;">
-                    <button type="submit" class="btn btn-danger"
-                            onclick="return confirm('แน่ใจหรือไม่ว่าต้องการลบงานวิจัยนี้?')">
-                        <i class="fas fa-trash-alt"></i> ลบ
-                    </button>
-                </form>
+                </p>
             </div>
             {% endif %}
+
+            {% if research.abstract %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center mb-2"><i class="fas fa-align-left mr-2"></i> บทคัดย่อ:</strong>
+                <p class="text-gray-700 text-justify leading-relaxed">{{ research.abstract }}</p>
+            </div>
+            {% endif %}
+
+            {% if research.keywords %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center mb-2"><i class="fas fa-tags mr-2"></i> คำสำคัญ:</strong>
+                <div class="flex flex-wrap gap-2">
+                    {% for keyword in research.keywords.split(',') %}
+                        <span class="bg-cyan-100 text-cyan-800 text-sm font-medium px-3 py-1 rounded-full">{{ keyword.strip() }}</span>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if research.doi %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center"><i class="fas fa-link mr-2"></i> DOI:</strong>
+                <p class="text-gray-600 mt-1">
+                    <a href="https://doi.org/{{ research.doi }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline">{{ research.doi }}</a>
+                </p>
+            </div>
+            {% endif %}
+
+            {% if research.url %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center"><i class="fas fa-globe mr-2"></i> URL:</strong>
+                <p class="text-gray-600 mt-1">
+                    <a href="{{ research.url }}" target="_blank" class="text-blue-600 hover:text-blue-800 underline break-all">{{ research.url }}</a>
+                </p>
+            </div>
+            {% endif %}
+
+            {% if research.file_path %}
+            <div class="mb-6">
+                <strong class="text-gray-700 flex items-center"><i class="fas fa-file-pdf mr-2"></i> ไฟล์:</strong>
+                <p class="text-gray-600 mt-1">{{ research.file_path }}</p>
+            </div>
+            {% endif %}
+
+            <hr class="my-6 border-gray-300">
+            <div class="text-sm text-gray-500">
+                <i class="fas fa-user-circle mr-1"></i> เพิ่มโดย: {{ research.uploader.full_name or research.uploader.username }} |
+                <i class="fas fa-clock mr-1"></i> เพิ่มเมื่อ: {{ research.created_at.strftime('%d/%m/%Y %H:%M') }}
+                {% if research.updated_at != research.created_at %}
+                | <i class="fas fa-edit mr-1"></i> แก้ไขล่าสุด: {{ research.updated_at.strftime('%d/%m/%Y %H:%M') }}
+                {% endif %}
+            </div>
         </div>
+        {% if current_user.is_authenticated and (current_user.id == research.user_id or current_user.is_admin) %}
+        <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 flex gap-2">
+            <a href="{{ url_for('research.edit', id=research.id) }}" class="px-4 py-2 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition">
+                <i class="fas fa-edit mr-1"></i> แก้ไข
+            </a>
+            <form method="POST" action="{{ url_for('research.delete', id=research.id) }}" class="inline">
+                <button type="submit" class="px-4 py-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition"
+                        onclick="return confirm('แน่ใจหรือไม่ว่าต้องการลบงานวิจัยนี้?')">
+                    <i class="fas fa-trash-alt mr-1"></i> ลบ
+                </button>
+            </form>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
