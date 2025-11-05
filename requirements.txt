@@ -7,6 +7,9 @@ email-validator==2.1.0
 python-dotenv==1.0.0
 Werkzeug==3.0.1
 
+# Database drivers
+psycopg2-binary==2.9.9  # PostgreSQL adapter (use psycopg2 for production)
+
 # Database migrations
 Flask-Migrate==4.0.5
 
