@@ -29,19 +29,19 @@
 </head>
 <body class="bg-gray-50">
     <!-- Modern Navigation Bar -->
-    <nav class="bg-white shadow-lg border-b border-gray-200 sticky top-0 z-50 backdrop-blur-sm bg-white/95">
+    <nav class="bg-white shadow-md border-b-2 border-green-600 sticky top-0 z-50 backdrop-blur-sm bg-white/95">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between py-4">
                 <!-- Logo and Brand -->
                 <a class="flex items-center space-x-3 group" href="{{ url_for('main.index') }}">
-                    <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition">
-                        <i class="fas fa-book-open text-white text-lg"></i>
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-lg flex items-center justify-center shadow-md group-hover:shadow-lg transition">
+                        <i class="fas fa-seedling text-white text-xl"></i>
                     </div>
                     <div class="hidden md:block">
-                        <span class="text-xl font-bold font-heading bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                        <span class="text-xl font-bold font-heading bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
                             ระบบจัดเก็บงานวิจัย
                         </span>
-                        <p class="text-xs text-gray-500 font-heading">Research Management System</p>
+                        <p class="text-xs text-gray-600 font-heading">Research Management System</p>
                     </div>
                 </a>
 
@@ -52,15 +52,15 @@
 
                 <!-- Desktop Navigation -->
                 <div class="hidden lg:flex items-center space-x-2" id="navbar-menu">
-                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading font-medium flex items-center"
+                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('main.index') }}">
                         <i class="fas fa-home mr-2"></i> หน้าแรก
                     </a>
-                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading font-medium flex items-center"
+                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('research.list') }}">
                         <i class="fas fa-book mr-2"></i> งานวิจัยทั้งหมด
                     </a>
-                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading font-medium flex items-center"
+                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('research.categories') }}">
                         <i class="fas fa-folder-open mr-2"></i> หมวดหมู่
                     </a>
@@ -68,11 +68,11 @@
                     {% if current_user.is_authenticated %}
                     <div class="h-6 w-px bg-gray-300 mx-2"></div>
 
-                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition font-heading font-medium flex items-center"
+                    <a class="px-4 py-2 rounded-lg text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('main.dashboard') }}">
                         <i class="fas fa-tachometer-alt mr-2"></i> แดชบอร์ด
                     </a>
-                    <a class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition font-heading font-medium flex items-center shadow-md hover:shadow-lg"
+                    <a class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition font-heading font-medium flex items-center shadow-md hover:shadow-lg"
                        href="{{ url_for('research.add') }}">
                         <i class="fas fa-plus-circle mr-2"></i> เพิ่มงานวิจัย
                     </a>
@@ -80,7 +80,7 @@
                     <!-- User Dropdown -->
                     <div class="relative group">
                         <button class="px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition flex items-center font-heading font-medium">
-                            <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center mr-2">
+                            <div class="w-8 h-8 bg-gradient-to-br from-green-600 to-teal-600 rounded-full flex items-center justify-center mr-2">
                                 <i class="fas fa-user text-white text-sm"></i>
                             </div>
                             <span class="max-w-[100px] truncate">{{ current_user.username }}</span>
@@ -91,11 +91,11 @@
                                 <p class="text-sm font-semibold text-gray-800 font-heading">{{ current_user.username }}</p>
                                 <p class="text-xs text-gray-500">{{ current_user.email or 'ผู้ใช้งาน' }}</p>
                             </div>
-                            <a class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading flex items-center"
+                            <a class="block px-4 py-2 text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading flex items-center"
                                href="{{ url_for('main.dashboard') }}">
                                 <i class="fas fa-tachometer-alt mr-3 w-4"></i> แดชบอร์ด
                             </a>
-                            <a class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading flex items-center"
+                            <a class="block px-4 py-2 text-gray-700 hover:bg-red-50 hover:text-red-600 transition font-heading flex items-center"
                                href="{{ url_for('auth.logout') }}">
                                 <i class="fas fa-sign-out-alt mr-3 w-4"></i> ออกจากระบบ
                             </a>
@@ -108,7 +108,7 @@
                        href="{{ url_for('auth.login') }}">
                         <i class="fas fa-sign-in-alt mr-2"></i> เข้าสู่ระบบ
                     </a>
-                    <a class="px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition font-heading font-medium flex items-center shadow-md hover:shadow-lg"
+                    <a class="px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition font-heading font-medium flex items-center shadow-md hover:shadow-lg"
                        href="{{ url_for('auth.register') }}">
                         <i class="fas fa-user-plus mr-2"></i> ลงทะเบียน
                     </a>
@@ -119,15 +119,15 @@
             <!-- Mobile Menu -->
             <div class="lg:hidden hidden pb-4 border-t border-gray-100 mt-2" id="mobile-menu">
                 <div class="space-y-1 pt-4">
-                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading font-medium flex items-center"
+                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('main.index') }}">
                         <i class="fas fa-home mr-3 w-5"></i> หน้าแรก
                     </a>
-                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading font-medium flex items-center"
+                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('research.list') }}">
                         <i class="fas fa-book mr-3 w-5"></i> งานวิจัยทั้งหมด
                     </a>
-                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition font-heading font-medium flex items-center"
+                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-green-50 hover:text-green-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('research.categories') }}">
                         <i class="fas fa-folder-open mr-3 w-5"></i> หมวดหมู่
                     </a>
@@ -135,11 +135,11 @@
                     {% if current_user.is_authenticated %}
                     <div class="h-px bg-gray-200 my-2"></div>
 
-                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 transition font-heading font-medium flex items-center"
+                    <a class="block px-4 py-3 rounded-lg text-gray-700 hover:bg-amber-50 hover:text-amber-700 transition font-heading font-medium flex items-center"
                        href="{{ url_for('main.dashboard') }}">
                         <i class="fas fa-tachometer-alt mr-3 w-5"></i> แดชบอร์ด
                     </a>
-                    <a class="block px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-heading font-medium flex items-center shadow-md"
+                    <a class="block px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-heading font-medium flex items-center shadow-md"
                        href="{{ url_for('research.add') }}">
                         <i class="fas fa-plus-circle mr-3 w-5"></i> เพิ่มงานวิจัย
                     </a>
@@ -161,7 +161,7 @@
                        href="{{ url_for('auth.login') }}">
                         <i class="fas fa-sign-in-alt mr-3 w-5"></i> เข้าสู่ระบบ
                     </a>
-                    <a class="block px-4 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg font-heading font-medium flex items-center shadow-md"
+                    <a class="block px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg font-heading font-medium flex items-center shadow-md"
                        href="{{ url_for('auth.register') }}">
                         <i class="fas fa-user-plus mr-3 w-5"></i> ลงทะเบียน
                     </a>
@@ -198,8 +198,8 @@
                 <!-- About Section -->
                 <div class="col-span-1 md:col-span-2">
                     <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-lg">
-                            <i class="fas fa-book-open text-white"></i>
+                        <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-lg">
+                            <i class="fas fa-seedling text-white"></i>
                         </div>
                         <span class="text-xl font-bold font-heading">ระบบจัดเก็บงานวิจัย</span>
                     </div>
@@ -209,13 +209,13 @@
                     </p>
                     <div class="flex space-x-3">
                         <span class="inline-flex items-center px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm">
-                            <i class="fas fa-shield-alt mr-2 text-blue-400"></i> ปลอดภัย
+                            <i class="fas fa-shield-alt mr-2 text-green-400"></i> ปลอดภัย
                         </span>
                         <span class="inline-flex items-center px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm">
-                            <i class="fas fa-bolt mr-2 text-yellow-400"></i> รวดเร็ว
+                            <i class="fas fa-bolt mr-2 text-amber-400"></i> รวดเร็ว
                         </span>
                         <span class="inline-flex items-center px-3 py-1 bg-white/10 backdrop-blur-sm rounded-full text-sm">
-                            <i class="fas fa-heart mr-2 text-red-400"></i> ใช้งานง่าย
+                            <i class="fas fa-leaf mr-2 text-emerald-400"></i> ใช้งานง่าย
                         </span>
                     </div>
                 </div>
@@ -223,31 +223,31 @@
                 <!-- Quick Links -->
                 <div>
                     <h3 class="text-lg font-semibold font-heading mb-4 flex items-center">
-                        <i class="fas fa-link mr-2 text-blue-400"></i> ลิงก์ด่วน
+                        <i class="fas fa-link mr-2 text-green-400"></i> ลิงก์ด่วน
                     </h3>
                     <ul class="space-y-2">
                         <li>
                             <a href="{{ url_for('main.index') }}" class="text-gray-300 hover:text-white transition flex items-center group">
-                                <i class="fas fa-chevron-right mr-2 text-xs text-blue-400 group-hover:translate-x-1 transition"></i>
+                                <i class="fas fa-chevron-right mr-2 text-xs text-green-400 group-hover:translate-x-1 transition"></i>
                                 หน้าแรก
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('research.list') }}" class="text-gray-300 hover:text-white transition flex items-center group">
-                                <i class="fas fa-chevron-right mr-2 text-xs text-blue-400 group-hover:translate-x-1 transition"></i>
+                                <i class="fas fa-chevron-right mr-2 text-xs text-green-400 group-hover:translate-x-1 transition"></i>
                                 งานวิจัยทั้งหมด
                             </a>
                         </li>
                         <li>
                             <a href="{{ url_for('research.categories') }}" class="text-gray-300 hover:text-white transition flex items-center group">
-                                <i class="fas fa-chevron-right mr-2 text-xs text-blue-400 group-hover:translate-x-1 transition"></i>
+                                <i class="fas fa-chevron-right mr-2 text-xs text-green-400 group-hover:translate-x-1 transition"></i>
                                 หมวดหมู่
                             </a>
                         </li>
                         {% if not current_user.is_authenticated %}
                         <li>
                             <a href="{{ url_for('auth.register') }}" class="text-gray-300 hover:text-white transition flex items-center group">
-                                <i class="fas fa-chevron-right mr-2 text-xs text-blue-400 group-hover:translate-x-1 transition"></i>
+                                <i class="fas fa-chevron-right mr-2 text-xs text-green-400 group-hover:translate-x-1 transition"></i>
                                 ลงทะเบียน
                             </a>
                         </li>
@@ -258,7 +258,7 @@
                 <!-- Features -->
                 <div>
                     <h3 class="text-lg font-semibold font-heading mb-4 flex items-center">
-                        <i class="fas fa-star mr-2 text-yellow-400"></i> คุณสมบัติ
+                        <i class="fas fa-star mr-2 text-amber-400"></i> คุณสมบัติ
                     </h3>
                     <ul class="space-y-2 text-gray-300">
                         <li class="flex items-start">
@@ -289,7 +289,7 @@
                     </div>
                     <div class="flex items-center space-x-4 text-sm text-gray-400">
                         <span class="flex items-center">
-                            <i class="fas fa-code mr-2 text-blue-400"></i>
+                            <i class="fas fa-code mr-2 text-green-400"></i>
                             พัฒนาด้วย Flask & Tailwind CSS
                         </span>
                     </div>
