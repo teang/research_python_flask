@@ -3,76 +3,278 @@
 {% block title %}แดชบอร์ด - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="w-full">
-    <h1 class="text-3xl font-bold text-gray-800 mb-2"><i class="fas fa-tachometer-alt mr-2"></i> แดชบอร์ด</h1>
-    <p class="text-xl text-gray-600 mb-4">ยินดีต้อนรับ, {{ current_user.full_name or current_user.username }}!</p>
-    <hr class="mb-6 border-gray-300">
+<!-- Dashboard Header -->
+<div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">
+        <i class="fas fa-tachometer-alt mr-2 text-blue-600"></i> แดชบอร์ด
+    </h1>
+    <p class="text-gray-600">ยินดีต้อนรับ, <span class="font-semibold text-gray-800">{{ current_user.full_name or current_user.username }}</span>!</p>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <div class="bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-lg shadow-lg p-6">
-        <h5 class="text-lg font-semibold mb-2"><i class="fas fa-folder-open mr-2"></i> งานวิจัยของคุณ</h5>
-        <p class="text-5xl font-bold">{{ researches|length }}</p>
-    </div>
-    <div class="bg-gradient-to-br from-green-500 to-green-600 text-white rounded-lg shadow-lg p-6">
-        <h5 class="text-lg font-semibold mb-4">เพิ่มงานวิจัยใหม่</h5>
-        <a href="{{ url_for('research.add') }}" class="inline-block px-6 py-2 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-100 transition">
-            <i class="fas fa-plus-circle mr-1"></i> เพิ่มเลย
-        </a>
-    </div>
-</div>
-
-<div class="w-full">
-    <h3 class="text-2xl font-bold text-gray-800 mb-4">งานวิจัยของคุณ</h3>
-    {% if researches %}
-    <div class="bg-white rounded-lg shadow-md overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ชื่อเรื่อง</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ผู้วิจัย</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ปี</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">วันที่เพิ่ม</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">จัดการ</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    {% for research in researches %}
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4">
-                            <a href="{{ url_for('research.view', id=research.id) }}" class="text-blue-600 hover:text-blue-800 font-medium">
-                                {{ research.title }}
-                            </a>
-                        </td>
-                        <td class="px-6 py-4 text-gray-700">{{ research.authors }}</td>
-                        <td class="px-6 py-4 text-gray-700">{{ research.year or '-' }}</td>
-                        <td class="px-6 py-4 text-gray-700">{{ research.created_at.strftime('%d/%m/%Y') }}</td>
-                        <td class="px-6 py-4 flex gap-2">
-                            <a href="{{ url_for('research.edit', id=research.id) }}" class="inline-flex items-center px-3 py-1 bg-yellow-500 text-white text-sm font-medium rounded hover:bg-yellow-600 transition">
-                                <i class="fas fa-edit"></i>
-                            </a>
-                            <form method="POST" action="{{ url_for('research.delete', id=research.id) }}" class="inline">
-                                <button type="submit" class="inline-flex items-center px-3 py-1 bg-red-500 text-white text-sm font-medium rounded hover:bg-red-600 transition"
-                                        onclick="return confirm('แน่ใจหรือไม่ว่าต้องการลบ?')">
-                                    <i class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+<!-- Info Boxes - AdminLTE Style -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+    <!-- Research Count -->
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4 flex-1">
+                    <div class="text-sm font-medium text-gray-500 uppercase">งานวิจัยของฉัน</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ stats.total_researches }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-blue-50 px-6 py-3 border-t border-blue-100">
+            <a href="{{ url_for('research.list') }}" class="text-sm text-blue-600 hover:text-blue-800 font-medium flex items-center">
+                <i class="fas fa-eye mr-2"></i> ดูทั้งหมด
+            </a>
         </div>
     </div>
-    {% else %}
-    <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
-        <p class="flex items-center">
-            <i class="fas fa-info-circle mr-2"></i>
-            คุณยังไม่มีงานวิจัย
-            <a href="{{ url_for('research.add') }}" class="ml-1 underline hover:text-blue-900 font-medium">เพิ่มงานวิจัยแรกของคุณ</a>
-        </p>
+
+    <!-- Bookmarks Count -->
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-bookmark text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4 flex-1">
+                    <div class="text-sm font-medium text-gray-500 uppercase">บุ๊กมาร์ก</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ stats.total_bookmarks }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-green-50 px-6 py-3 border-t border-green-100">
+            <a href="{{ url_for('main.bookmarks') }}" class="text-sm text-green-600 hover:text-green-800 font-medium flex items-center">
+                <i class="fas fa-eye mr-2"></i> ดูทั้งหมด
+            </a>
+        </div>
     </div>
-    {% endif %}
+
+    <!-- Total Views -->
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-eye text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4 flex-1">
+                    <div class="text-sm font-medium text-gray-500 uppercase">การดูทั้งหมด</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ stats.total_views }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-orange-50 px-6 py-3 border-t border-orange-100">
+            <span class="text-sm text-orange-600 font-medium flex items-center">
+                <i class="fas fa-chart-line mr-2"></i> จากงานวิจัยของคุณ
+            </span>
+        </div>
+    </div>
+
+    <!-- Comments Count -->
+    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden">
+        <div class="p-6">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg">
+                        <i class="fas fa-comments text-white text-2xl"></i>
+                    </div>
+                </div>
+                <div class="ml-4 flex-1">
+                    <div class="text-sm font-medium text-gray-500 uppercase">ความคิดเห็น</div>
+                    <div class="text-3xl font-bold text-gray-800">{{ stats.total_comments }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-purple-50 px-6 py-3 border-t border-purple-100">
+            <span class="text-sm text-purple-600 font-medium flex items-center">
+                <i class="fas fa-comment-dots mr-2"></i> ที่คุณแสดงความคิดเห็น
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <!-- Quick Actions Card -->
+    <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-4">
+                <h3 class="text-lg font-semibold flex items-center">
+                    <i class="fas fa-bolt mr-2"></i> การกระทำด่วน
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="space-y-3">
+                    <a href="{{ url_for('research.add') }}"
+                       class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition shadow-md hover:shadow-lg">
+                        <span class="font-medium">
+                            <i class="fas fa-plus-circle mr-2"></i> เพิ่มงานวิจัยใหม่
+                        </span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="{{ url_for('research.list') }}"
+                       class="flex items-center justify-between p-4 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg hover:from-green-600 hover:to-green-700 transition shadow-md hover:shadow-lg">
+                        <span class="font-medium">
+                            <i class="fas fa-search mr-2"></i> ค้นหางานวิจัย
+                        </span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="{{ url_for('main.bookmarks') }}"
+                       class="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:from-yellow-600 hover:to-orange-600 transition shadow-md hover:shadow-lg">
+                        <span class="font-medium">
+                            <i class="fas fa-bookmark mr-2"></i> งานวิจัยที่บันทึกไว้
+                        </span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                    <a href="{{ url_for('research.categories') }}"
+                       class="flex items-center justify-between p-4 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-lg hover:from-purple-600 hover:to-purple-700 transition shadow-md hover:shadow-lg">
+                        <span class="font-medium">
+                            <i class="fas fa-folder-open mr-2"></i> เรียกดูหมวดหมู่
+                        </span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats Card -->
+        <div class="bg-white rounded-lg shadow-md overflow-hidden mt-6">
+            <div class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-4">
+                <h3 class="text-lg font-semibold flex items-center">
+                    <i class="fas fa-chart-pie mr-2"></i> สถิติของฉัน
+                </h3>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                        <span class="text-gray-600 flex items-center">
+                            <i class="fas fa-download text-blue-500 mr-2"></i> ดาวน์โหลด
+                        </span>
+                        <span class="text-xl font-bold text-gray-800">{{ stats.total_downloads }}</span>
+                    </div>
+                    <div class="flex items-center justify-between pb-3 border-b border-gray-200">
+                        <span class="text-gray-600 flex items-center">
+                            <i class="fas fa-calendar-alt text-green-500 mr-2"></i> สมาชิกตั้งแต่
+                        </span>
+                        <span class="text-sm font-semibold text-gray-800">{{ current_user.created_at.strftime('%d/%m/%Y') }}</span>
+                    </div>
+                    {% if stats.most_viewed %}
+                    <div class="pt-2">
+                        <div class="text-xs text-gray-500 uppercase mb-2">งานวิจัยยอดนิยม</div>
+                        <a href="{{ url_for('research.view', id=stats.most_viewed.id) }}"
+                           class="text-blue-600 hover:text-blue-800 font-medium text-sm line-clamp-2">
+                            {{ stats.most_viewed.title }}
+                        </a>
+                        <div class="text-xs text-gray-500 mt-1">
+                            <i class="fas fa-eye mr-1"></i> {{ stats.most_viewed.view_count }} ครั้ง
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Research Table -->
+    <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <div class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-4">
+                <h3 class="text-lg font-semibold flex items-center justify-between">
+                    <span>
+                        <i class="fas fa-history mr-2"></i> งานวิจัยล่าสุดของคุณ
+                    </span>
+                    <span class="text-sm font-normal bg-white/20 px-3 py-1 rounded-full">
+                        {{ stats.total_researches }} รายการ
+                    </span>
+                </h3>
+            </div>
+            <div class="overflow-x-auto">
+                {% if researches %}
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">ชื่อเรื่อง</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">สถิติ</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">จัดการ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for research in researches[:10] %}
+                        <tr class="hover:bg-gray-50 transition">
+                            <td class="px-6 py-4">
+                                <div>
+                                    <a href="{{ url_for('research.view', id=research.id) }}"
+                                       class="text-blue-600 hover:text-blue-800 font-medium line-clamp-2">
+                                        {{ research.title }}
+                                    </a>
+                                    <div class="text-xs text-gray-500 mt-1">
+                                        <i class="fas fa-calendar mr-1"></i> {{ research.created_at.strftime('%d/%m/%Y') }}
+                                        {% if research.year %}
+                                        <span class="ml-2"><i class="fas fa-book-open mr-1"></i> ปี {{ research.year }}</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex gap-3 text-xs">
+                                    <span class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                                        <i class="fas fa-eye mr-1"></i> {{ research.view_count }}
+                                    </span>
+                                    <span class="inline-flex items-center px-2 py-1 bg-green-100 text-green-700 rounded">
+                                        <i class="fas fa-download mr-1"></i> {{ research.download_count }}
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4">
+                                <div class="flex gap-2">
+                                    <a href="{{ url_for('research.view', id=research.id) }}"
+                                       class="inline-flex items-center px-3 py-1 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 transition"
+                                       title="ดู">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{{ url_for('research.edit', id=research.id) }}"
+                                       class="inline-flex items-center px-3 py-1 bg-yellow-500 text-white text-sm font-medium rounded hover:bg-yellow-600 transition"
+                                       title="แก้ไข">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="p-8 text-center">
+                    <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-book text-gray-400 text-3xl"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-800 mb-2">ยังไม่มีงานวิจัย</h4>
+                    <p class="text-gray-600 mb-4">เริ่มต้นเพิ่มงานวิจัยแรกของคุณเลย!</p>
+                    <a href="{{ url_for('research.add') }}"
+                       class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-md hover:shadow-lg">
+                        <i class="fas fa-plus-circle mr-2"></i> เพิ่มงานวิจัยใหม่
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% if researches and researches|length > 10 %}
+            <div class="bg-gray-50 px-6 py-4 border-t border-gray-200 text-center">
+                <a href="{{ url_for('research.list') }}"
+                   class="text-blue-600 hover:text-blue-800 font-medium text-sm">
+                    ดูงานวิจัยทั้งหมด <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
 </div>
 {% endblock %}
