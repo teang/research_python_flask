@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Admin Dashboard{% endblock %} - Research Management System</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,395 +15,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
             font-family: 'Source Sans Pro', sans-serif;
-            background-color: #f4f6f9;
-            color: #495057;
         }
 
-        /* Sidebar Styles */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            width: 250px;
-            background: linear-gradient(180deg, #343a40 0%, #23272b 100%);
-            color: #c2c7d0;
-            overflow-y: auto;
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-
-        .sidebar-brand {
-            padding: 1.5rem 1rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,.1);
-        }
-
-        .sidebar-brand a {
-            color: #fff;
-            text-decoration: none;
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        .sidebar-brand .brand-text {
-            display: block;
-            font-size: 0.9rem;
-            color: #adb5bd;
-            margin-top: 0.25rem;
-        }
-
-        .sidebar-menu {
-            list-style: none;
-            padding: 0;
-            margin: 1rem 0;
-        }
-
-        .sidebar-menu .menu-header {
-            padding: 0.75rem 1rem;
-            font-size: 0.75rem;
-            color: #6c757d;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .sidebar-menu li a {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem;
-            color: #c2c7d0;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .sidebar-menu li a:hover {
-            background-color: rgba(255,255,255,.1);
-            color: #fff;
-            padding-left: 1.5rem;
-        }
-
-        .sidebar-menu li a.active {
-            background-color: #007bff;
-            color: #fff;
-            border-left: 3px solid #0056b3;
-        }
-
-        .sidebar-menu li a i {
-            width: 25px;
-            margin-right: 0.75rem;
-            font-size: 1rem;
-        }
-
-        .sidebar-menu .badge {
-            margin-left: auto;
-        }
-
-        /* Main Content */
-        .main-content {
-            margin-left: 250px;
-            min-height: 100vh;
-            transition: all 0.3s;
-        }
-
-        /* Top Navbar */
-        .top-navbar {
-            background-color: #fff;
-            padding: 1rem 2rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,.08);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 999;
-        }
-
-        .navbar-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .navbar-menu .btn-link {
-            color: #6c757d;
-            text-decoration: none;
-        }
-
-        .user-menu {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-weight: 600;
-        }
-
-        /* Content Area */
-        .content-wrapper {
-            padding: 2rem;
-        }
-
-        .content-header {
-            margin-bottom: 2rem;
-        }
-
-        .content-header h1 {
-            font-size: 1.8rem;
-            color: #343a40;
-            font-weight: 600;
-        }
-
-        .breadcrumb {
-            background-color: transparent;
-            padding: 0;
-            margin: 0.5rem 0 0 0;
-        }
-
-        .breadcrumb-item a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-        /* Cards */
-        .card {
-            border: none;
-            border-radius: 0.5rem;
-            box-shadow: 0 0 1rem rgba(0,0,0,.05);
-            margin-bottom: 1.5rem;
-        }
-
-        .card-header {
-            background-color: transparent;
-            border-bottom: 1px solid #f0f0f0;
-            padding: 1rem 1.25rem;
-            font-weight: 600;
-            color: #343a40;
-        }
-
-        .card-body {
-            padding: 1.25rem;
-        }
-
-        /* Info Boxes */
-        .info-box {
-            display: flex;
-            align-items: center;
-            background: #fff;
-            padding: 1.25rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 0 1rem rgba(0,0,0,.05);
-            margin-bottom: 1.5rem;
-        }
-
-        .info-box-icon {
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 0.5rem;
-            font-size: 2rem;
-            color: #fff;
-            margin-right: 1rem;
-        }
-
-        .info-box-icon.bg-info { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .info-box-icon.bg-success { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-        .info-box-icon.bg-warning { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; }
-        .info-box-icon.bg-danger { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
-        .info-box-icon.bg-primary { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
-
-        .info-box-content {
-            flex: 1;
-        }
-
-        .info-box-text {
-            font-size: 0.9rem;
-            color: #6c757d;
-            margin-bottom: 0.25rem;
-        }
-
-        .info-box-number {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #343a40;
-        }
-
-        /* Tables */
-        .table {
-            background-color: #fff;
-        }
-
-        .table thead th {
-            border-bottom: 2px solid #dee2e6;
-            font-weight: 600;
-            color: #495057;
-        }
-
-        /* Buttons */
-        .btn {
-            border-radius: 0.25rem;
-            padding: 0.5rem 1rem;
-            font-weight: 500;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #5568d3 0%, #63398b 100%);
-        }
-
-        /* Badges */
-        .badge {
-            padding: 0.35rem 0.65rem;
-            font-weight: 500;
-        }
-
-        /* Alerts */
-        .alert {
-            border: none;
-            border-radius: 0.5rem;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .sidebar {
-                margin-left: -250px;
-            }
-
-            .sidebar.show {
-                margin-left: 0;
-            }
-
-            .main-content {
-                margin-left: 0;
-            }
-
-            .content-wrapper {
-                padding: 1rem;
-            }
-        }
-
-        /* Scrollbar */
-        .sidebar::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: rgba(255,255,255,.05);
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,.2);
-            border-radius: 3px;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,.3);
-        }
+        /* Custom gradient colors for info boxes */
+        .gradient-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .gradient-pink { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        .gradient-orange { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+        .gradient-red { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .gradient-lavender { background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%); }
     </style>
 
     {% block extra_css %}{% endblock %}
 </head>
-<body>
+<body class="bg-gray-100">
     <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">
-            <a href="{{ url_for('admin.dashboard') }}">
-                <i class="fas fa-graduation-cap"></i>
-                <strong>Admin Panel</strong>
-                <span class="brand-text">Research Management</span>
+    <aside id="sidebar" class="fixed top-0 left-0 bottom-0 w-64 bg-gradient-to-b from-gray-800 to-gray-900 text-gray-300 overflow-y-auto transition-all duration-300 z-50 lg:translate-x-0 -translate-x-full">
+        <div class="px-4 py-6 text-center border-b border-gray-700">
+            <a href="{{ url_for('admin.dashboard') }}" class="text-white no-underline">
+                <i class="fas fa-graduation-cap text-2xl"></i>
+                <div class="mt-2">
+                    <strong class="block text-lg">Admin Panel</strong>
+                    <span class="text-sm text-gray-400">Research Management</span>
+                </div>
             </a>
         </div>
 
-        <ul class="sidebar-menu">
-            <li class="menu-header">MAIN NAVIGATION</li>
+        <ul class="py-4">
+            <li class="px-4 py-2 text-xs text-gray-500 uppercase tracking-wider font-semibold">MAIN NAVIGATION</li>
             <li>
-                <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
-                    <i class="fas fa-tachometer-alt"></i>
+                <a href="{{ url_for('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if request.endpoint == 'admin.dashboard' %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-tachometer-alt w-6"></i>
                     <span>Dashboard</span>
                 </a>
             </li>
 
-            <li class="menu-header">USER MANAGEMENT</li>
+            <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">USER MANAGEMENT</li>
             <li>
-                <a href="{{ url_for('admin.users') }}" class="{% if 'users' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-users"></i>
+                <a href="{{ url_for('admin.users') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'users' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-users w-6"></i>
                     <span>ผู้ใช้งาน</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.roles') }}" class="{% if 'roles' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-user-tag"></i>
+                <a href="{{ url_for('admin.roles') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'roles' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-user-tag w-6"></i>
                     <span>บทบาท</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.permissions') }}" class="{% if 'permissions' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-shield-alt"></i>
+                <a href="{{ url_for('admin.permissions') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'permissions' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-shield-alt w-6"></i>
                     <span>สิทธิ์การใช้งาน</span>
                 </a>
             </li>
 
-            <li class="menu-header">CONTENT MANAGEMENT</li>
+            <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">CONTENT MANAGEMENT</li>
             <li>
-                <a href="{{ url_for('admin.researches') }}" class="{% if 'researches' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-book"></i>
+                <a href="{{ url_for('admin.researches') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'researches' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-book w-6"></i>
                     <span>งานวิจัย</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.categories') }}" class="{% if 'categories' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-folder"></i>
+                <a href="{{ url_for('admin.categories') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'categories' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-folder w-6"></i>
                     <span>หมวดหมู่</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.comments') }}" class="{% if 'comments' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-comments"></i>
+                <a href="{{ url_for('admin.comments') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'comments' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-comments w-6"></i>
                     <span>ความคิดเห็น</span>
                 </a>
             </li>
 
-            <li class="menu-header">SYSTEM</li>
+            <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">SYSTEM</li>
             <li>
-                <a href="{{ url_for('admin.audit_logs') }}" class="{% if 'audit_logs' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-history"></i>
+                <a href="{{ url_for('admin.audit_logs') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'audit_logs' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-history w-6"></i>
                     <span>บันทึกการใช้งาน</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.settings') }}" class="{% if 'settings' in request.endpoint %}active{% endif %}">
-                    <i class="fas fa-cog"></i>
+                <a href="{{ url_for('admin.settings') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'settings' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                    <i class="fas fa-cog w-6"></i>
                     <span>ตั้งค่า</span>
                 </a>
             </li>
 
-            <li class="menu-header">OTHER</li>
+            <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">OTHER</li>
             <li>
-                <a href="{{ url_for('main.index') }}">
-                    <i class="fas fa-home"></i>
+                <a href="{{ url_for('main.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all">
+                    <i class="fas fa-home w-6"></i>
                     <span>กลับหน้าหลัก</span>
                 </a>
             </li>
@@ -411,57 +116,68 @@
     </aside>
 
     <!-- Main Content -->
-    <div class="main-content">
+    <div class="lg:ml-64 min-h-screen transition-all duration-300">
         <!-- Top Navbar -->
-        <nav class="top-navbar">
-            <div class="navbar-menu">
-                <button class="btn btn-link" id="sidebarToggle">
-                    <i class="fas fa-bars"></i>
+        <nav class="bg-white shadow-md px-6 py-4 flex items-center justify-between sticky top-0 z-40">
+            <div class="flex items-center gap-4">
+                <button id="sidebarToggle" class="text-gray-600 hover:text-gray-800 focus:outline-none lg:hidden">
+                    <i class="fas fa-bars text-2xl"></i>
                 </button>
-                <h5 class="mb-0">{% block page_title %}Dashboard{% endblock %}</h5>
+                <h5 class="text-lg font-semibold text-gray-800">{% block page_title %}Dashboard{% endblock %}</h5>
             </div>
 
-            <div class="user-menu">
-                <div class="dropdown">
-                    <button class="btn btn-link dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-bell"></i>
-                        <span class="badge bg-danger badge-sm">3</span>
+            <div class="flex items-center gap-4">
+                <div class="relative group">
+                    <button class="text-gray-600 hover:text-gray-800 focus:outline-none relative">
+                        <i class="fas fa-bell text-xl"></i>
+                        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">3</span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><h6 class="dropdown-header">แจ้งเตือน</h6></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle text-info"></i> แจ้งเตือนใหม่ 1</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-info-circle text-info"></i> แจ้งเตือนใหม่ 2</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-center" href="#">ดูทั้งหมด</a></li>
-                    </ul>
+                    <div class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block z-50">
+                        <h6 class="px-4 py-2 text-sm font-semibold text-gray-700 border-b">แจ้งเตือน</h6>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-info-circle text-blue-500 mr-2"></i> แจ้งเตือนใหม่ 1
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-info-circle text-blue-500 mr-2"></i> แจ้งเตือนใหม่ 2
+                        </a>
+                        <div class="border-t"></div>
+                        <a href="#" class="block px-4 py-2 text-sm text-center text-blue-600 hover:bg-gray-100">ดูทั้งหมด</a>
+                    </div>
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn btn-link dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown">
-                        <div class="user-avatar me-2">
+                <div class="relative group">
+                    <button class="flex items-center gap-2 text-gray-700 hover:text-gray-900 focus:outline-none">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-white font-semibold">
                             {{ current_user.username[0].upper() }}
                         </div>
-                        <span>{{ current_user.username }}</span>
+                        <span class="hidden md:block">{{ current_user.username }}</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li><h6 class="dropdown-header">{{ current_user.full_name or current_user.username }}</h6></li>
-                        <li><a class="dropdown-item" href="{{ url_for('main.profile') }}"><i class="fas fa-user"></i> โปรไฟล์</a></li>
-                        <li><a class="dropdown-item" href="{{ url_for('main.edit_profile') }}"><i class="fas fa-cog"></i> ตั้งค่า</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> ออกจากระบบ</a></li>
-                    </ul>
+                    <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block z-50">
+                        <h6 class="px-4 py-2 text-sm font-semibold text-gray-700 border-b">{{ current_user.full_name or current_user.username }}</h6>
+                        <a href="{{ url_for('main.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-user mr-2"></i> โปรไฟล์
+                        </a>
+                        <a href="{{ url_for('main.edit_profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            <i class="fas fa-cog mr-2"></i> ตั้งค่า
+                        </a>
+                        <div class="border-t"></div>
+                        <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                            <i class="fas fa-sign-out-alt mr-2"></i> ออกจากระบบ
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
 
         <!-- Content Wrapper -->
-        <div class="content-wrapper">
+        <div class="p-6">
             <!-- Content Header -->
-            <div class="content-header">
-                <h1>{% block content_title %}Dashboard{% endblock %}</h1>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ url_for('admin.dashboard') }}">Home</a></li>
+            <div class="mb-6">
+                <h1 class="text-3xl font-semibold text-gray-800">{% block content_title %}Dashboard{% endblock %}</h1>
+                <nav class="mt-2" aria-label="breadcrumb">
+                    <ol class="flex space-x-2 text-sm text-gray-600">
+                        <li><a href="{{ url_for('admin.dashboard') }}" class="hover:text-blue-600">Home</a></li>
                         {% block breadcrumb %}{% endblock %}
                     </ol>
                 </nav>
@@ -471,10 +187,14 @@
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}
                     {% for category, message in messages %}
-                        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                            <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %}"></i>
-                            {{ message }}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        <div class="mb-4 p-4 rounded-lg border flex items-center justify-between {% if category == 'success' %}bg-green-50 border-green-200 text-green-800{% elif category == 'danger' %}bg-red-50 border-red-200 text-red-800{% elif category == 'warning' %}bg-yellow-50 border-yellow-200 text-yellow-800{% else %}bg-blue-50 border-blue-200 text-blue-800{% endif %}">
+                            <span class="flex items-center">
+                                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} mr-2"></i>
+                                {{ message }}
+                            </span>
+                            <button type="button" class="text-gray-500 hover:text-gray-700" onclick="this.parentElement.remove()">
+                                <i class="fas fa-times"></i>
+                            </button>
                         </div>
                     {% endfor %}
                 {% endif %}
@@ -485,24 +205,22 @@
         </div>
     </div>
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- jQuery (optional, for compatibility) -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
         // Sidebar Toggle
-        document.getElementById('sidebarToggle').addEventListener('click', function() {
-            document.getElementById('sidebar').classList.toggle('show');
+        document.getElementById('sidebarToggle')?.addEventListener('click', function() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('-translate-x-full');
         });
 
         // Auto-hide alerts after 5 seconds
         setTimeout(function() {
-            var alerts = document.querySelectorAll('.alert');
+            const alerts = document.querySelectorAll('[class*="bg-"][class*="border-"]');
             alerts.forEach(function(alert) {
-                var bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
+                if (alert.querySelector('.fa-times')) {
+                    alert.style.transition = 'opacity 0.5s';
+                    alert.style.opacity = '0';
+                    setTimeout(() => alert.remove(), 500);
+                }
             });
         }, 5000);
     </script>

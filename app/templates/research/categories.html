@@ -3,56 +3,51 @@
 {% block title %}หมวดหมู่ - ระบบจัดเก็บงานวิจัย{% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-12">
-        <h1><i class="bi bi-folder"></i> หมวดหมู่งานวิจัย</h1>
-        <hr>
-    </div>
+<div class="w-full mb-6">
+    <h1 class="text-3xl font-bold text-gray-800"><i class="fas fa-folder mr-2"></i> หมวดหมู่งานวิจัย</h1>
+    <hr class="mt-4 mb-4 border-gray-300">
 </div>
 
-<div class="row mb-3">
-    <div class="col-12 text-end">
-        {% if current_user.is_authenticated %}
-        <a href="{{ url_for('research.add_category') }}" class="btn btn-success">
-            <i class="bi bi-plus-circle"></i> เพิ่มหมวดหมู่
-        </a>
-        {% endif %}
-    </div>
+<div class="w-full mb-6 text-right">
+    {% if current_user.is_authenticated %}
+    <a href="{{ url_for('research.add_category') }}" class="inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition">
+        <i class="fas fa-plus-circle mr-1"></i> เพิ่มหมวดหมู่
+    </a>
+    {% endif %}
 </div>
 
-<div class="row">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
     {% if categories %}
         {% for category in categories %}
-        <div class="col-md-4 mb-3">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <i class="bi bi-folder-fill text-primary"></i> {{ category.name }}
-                    </h5>
-                    {% if category.description %}
-                    <p class="card-text">{{ category.description }}</p>
-                    {% endif %}
-                    <p class="card-text">
-                        <small class="text-muted">
-                            <i class="bi bi-journal-text"></i> {{ category.researches|length }} งานวิจัย
-                        </small>
-                    </p>
-                </div>
-                <div class="card-footer">
-                    <a href="{{ url_for('research.list', category=category.id) }}" class="btn btn-sm btn-primary">
-                        <i class="bi bi-eye"></i> ดูงานวิจัย
-                    </a>
-                </div>
+        <div class="bg-white rounded-lg shadow-md hover:shadow-lg transition h-full flex flex-col">
+            <div class="p-6 flex-1">
+                <h5 class="text-xl font-semibold text-gray-800 mb-3">
+                    <i class="fas fa-folder-open text-blue-600 mr-2"></i> {{ category.name }}
+                </h5>
+                {% if category.description %}
+                <p class="text-gray-600 mb-4">{{ category.description }}</p>
+                {% endif %}
+                <p class="text-sm text-gray-500">
+                    <i class="fas fa-file-alt mr-1"></i> {{ category.researches|length }} งานวิจัย
+                </p>
+            </div>
+            <div class="bg-gray-50 px-6 py-3 border-t border-gray-200">
+                <a href="{{ url_for('research.list', category=category.id) }}" class="inline-block px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded hover:bg-blue-700 transition">
+                    <i class="fas fa-eye mr-1"></i> ดูงานวิจัย
+                </a>
             </div>
         </div>
         {% endfor %}
     {% else %}
-        <div class="col-12">
-            <div class="alert alert-info">
-                <i class="bi bi-info-circle"></i> ยังไม่มีหมวดหมู่
-                {% if current_user.is_authenticated %}
-                <a href="{{ url_for('research.add_category') }}" class="alert-link">เพิ่มหมวดหมู่แรก</a>
-                {% endif %}
+        <div class="col-span-full">
+            <div class="bg-blue-50 border-l-4 border-blue-500 text-blue-700 p-4 rounded">
+                <p class="flex items-center">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    ยังไม่มีหมวดหมู่
+                    {% if current_user.is_authenticated %}
+                    <a href="{{ url_for('research.add_category') }}" class="ml-1 underline hover:text-blue-900 font-medium">เพิ่มหมวดหมู่แรก</a>
+                    {% endif %}
+                </p>
             </div>
         </div>
     {% endif %}
