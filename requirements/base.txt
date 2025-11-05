@@ -1,0 +1,33 @@
+# Base dependencies for all environments
+# Core Flask
+Flask==3.0.0
+Werkzeug==3.0.1
+python-dotenv==1.0.0
+
+# Database
+Flask-SQLAlchemy==3.1.1
+Flask-Migrate==4.0.5
+psycopg2-binary==2.9.11
+
+# Authentication & Forms
+Flask-Login==0.6.3
+Flask-WTF==1.2.1
+WTForms==3.1.1
+email-validator>=2.3.0
+
+# File handling
+Flask-Reuploaded==1.4.0
+
+# Export functionality
+pandas==2.2.3
+openpyxl==3.1.2
+
+# REST API
+Flask-CORS==4.0.0
+Flask-RESTful==0.3.10
+
+# Email notifications
+Flask-Mail==0.10.0
+
+# PDF handling
+PyPDF2==3.0.1

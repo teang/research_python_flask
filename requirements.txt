@@ -1,32 +1,6 @@
-Flask==3.0.0
-Flask-SQLAlchemy==3.1.1
-Flask-Login==0.6.3
-Flask-WTF==1.2.1
-WTForms==3.1.1
-email-validator>=2.3.0  # Version 2.1.0 was yanked
-python-dotenv==1.0.0
-Werkzeug==3.0.1
+# Main requirements file
+# For production, use: pip install -r requirements/prod.txt
+# For development, use: pip install -r requirements/dev.txt
 
-# Database drivers
-psycopg2-binary==2.9.11  # PostgreSQL adapter (use psycopg2 for production)
-
-# Database migrations
-Flask-Migrate==4.0.5
-
-# File handling
-Flask-Reuploaded==1.4.0  # Replacement for deprecated Flask-Uploads
-
-# Export functionality
-pandas==2.2.3
-openpyxl==3.1.2
-# bibtexparser==1.4.3  # Optional - for BibTeX export only. Has compatibility issues with modern setuptools.
-
-# REST API
-Flask-CORS==4.0.0
-Flask-RESTful==0.3.10
-
-# Email notifications
-Flask-Mail==0.10.0
-
-# PDF handling
-PyPDF2==3.0.1
+# Default to production requirements
+-r requirements/prod.txt

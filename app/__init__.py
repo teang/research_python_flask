@@ -1,9 +1,14 @@
 from flask import Flask
 from flask_login import LoginManager
 from flask_cors import CORS
+from flask_migrate import Migrate
 from config import config
 from app.models import db, User
 import os
+
+
+# Initialize Flask-Migrate globally
+migrate = Migrate()
 
 
 def create_app(config_name='default'):
@@ -13,9 +18,31 @@ def create_app(config_name='default'):
 
     # Initialize Extensions
     db.init_app(app)
+    migrate.init_app(app, db)
 
     # Setup CORS for API endpoints
     CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+    # Initialize security features
+    from app.security import init_security
+    init_security(app)
+
+    # Initialize caching
+    from app.cache import init_cache
+    init_cache(app)
+
+    # Initialize monitoring and logging
+    from app.monitoring import init_logging, init_sentry, init_metrics
+    init_logging(app)
+    init_sentry(app)
+    init_metrics(app)
+
+    # Initialize Swagger documentation
+    try:
+        from app.swagger import init_swagger
+        init_swagger(app)
+    except ImportError:
+        app.logger.warning('Swagger not available, API documentation disabled')
 
     # Setup Flask-Login
     login_manager = LoginManager()
@@ -41,15 +68,20 @@ def create_app(config_name='default'):
     from app.routes import main_bp, auth_bp, research_bp
     from app.api import api_bp
     from app.admin_routes import admin_bp
+    from app.health import health_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(research_bp, url_prefix='/research')
     app.register_blueprint(api_bp)  # API routes with /api/v1 prefix
     app.register_blueprint(admin_bp)  # Admin routes with /admin prefix
+    app.register_blueprint(health_bp)  # Health check endpoints
 
-    # สร้างตารางในฐานข้อมูล
-    with app.app_context():
-        db.create_all()
+    # Register CLI commands
+    from app import cli
+    cli.register_commands(app)
+
+    # Log successful startup
+    app.logger.info(f'Application started in {config_name} mode')
 
     return app
