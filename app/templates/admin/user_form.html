@@ -1,0 +1,230 @@
+{% extends "admin/base.html" %}
+
+{% block title %}{% if user %}แก้ไขผู้ใช้{% else %}เพิ่มผู้ใช้ใหม่{% endif %}{% endblock %}
+{% block page_title %}{% if user %}แก้ไขผู้ใช้{% else %}เพิ่มผู้ใช้ใหม่{% endif %}{% endblock %}
+{% block content_title %}{% if user %}แก้ไขข้อมูลผู้ใช้{% else %}เพิ่มผู้ใช้ใหม่{% endif %}{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item"><a href="{{ url_for('admin.users') }}">ผู้ใช้งาน</a></li>
+<li class="breadcrumb-item active">{% if user %}แก้ไข{% else %}เพิ่มใหม่{% endif %}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-user me-2"></i>ข้อมูลผู้ใช้
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    {{ form.hidden_tag() }}
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">ชื่อผู้ใช้ <span class="text-danger">*</span></label>
+                            {{ form.username(class="form-control" + (" is-invalid" if form.username.errors else "")) }}
+                            {% if form.username.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.username.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">อีเมล <span class="text-danger">*</span></label>
+                            {{ form.email(class="form-control" + (" is-invalid" if form.email.errors else "")) }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.email.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">ชื่อ-นามสกุล</label>
+                        {{ form.full_name(class="form-control" + (" is-invalid" if form.full_name.errors else "")) }}
+                        {% if form.full_name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.full_name.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {% if not user %}
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label">รหัสผ่าน <span class="text-danger">*</span></label>
+                            {{ form.password(class="form-control" + (" is-invalid" if form.password.errors else "")) }}
+                            {% if form.password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.password.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">ยืนยันรหัสผ่าน <span class="text-danger">*</span></label>
+                            {{ form.confirm_password(class="form-control" + (" is-invalid" if form.confirm_password.errors else "")) }}
+                            {% if form.confirm_password.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.confirm_password.errors %}{{ error }}{% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label class="form-label">ประวัติส่วนตัว</label>
+                        {{ form.bio(class="form-control", rows="4") }}
+                        <small class="form-text text-muted">แนะนำตัวผู้ใช้</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">บทบาท</label>
+                        <div class="form-check">
+                            {{ form.is_admin(class="form-check-input") }}
+                            <label class="form-check-label" for="{{ form.is_admin.id }}">
+                                <i class="fas fa-user-shield text-danger"></i> ผู้ดูแลระบบ (Admin)
+                            </label>
+                        </div>
+                        <small class="form-text text-muted">ผู้ดูแลระบบมีสิทธิ์เข้าถึงทุกฟังก์ชัน</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">การแจ้งเตือน</label>
+                        <div class="form-check">
+                            {{ form.email_notifications(class="form-check-input", checked=True) }}
+                            <label class="form-check-label" for="{{ form.email_notifications.id }}">
+                                <i class="fas fa-bell"></i> รับการแจ้งเตือนทางอีเมล
+                            </label>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin.users') }}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-1"></i>ยกเลิก
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>{% if user %}บันทึกการเปลี่ยนแปลง{% else %}สร้างผู้ใช้{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        {% if user %}
+        <div class="card mt-3">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0">
+                    <i class="fas fa-key me-2"></i>เปลี่ยนรหัสผ่าน
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.user_change_password', user_id=user.id) }}">
+                    {{ password_form.hidden_tag() }}
+
+                    <div class="mb-3">
+                        <label class="form-label">รหัสผ่านใหม่</label>
+                        {{ password_form.new_password(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">ยืนยันรหัสผ่านใหม่</label>
+                        {{ password_form.confirm_new_password(class="form-control") }}
+                    </div>
+
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-key me-1"></i>เปลี่ยนรหัสผ่าน
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-lg-4">
+        {% if user %}
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-info-circle me-2"></i>ข้อมูลเพิ่มเติม
+                </h5>
+            </div>
+            <div class="card-body">
+                <table class="table table-sm">
+                    <tr>
+                        <td><i class="fas fa-hashtag text-muted"></i> ID</td>
+                        <td class="text-end"><strong>{{ user.id }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-calendar text-muted"></i> สมัครเมื่อ</td>
+                        <td class="text-end">{{ user.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-book text-muted"></i> งานวิจัย</td>
+                        <td class="text-end"><strong>{{ user.researches|length }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-bookmark text-muted"></i> บุ๊กมาร์ก</td>
+                        <td class="text-end"><strong>{{ user.bookmarks|length }}</strong></td>
+                    </tr>
+                    <tr>
+                        <td><i class="fas fa-comments text-muted"></i> ความคิดเห็น</td>
+                        <td class="text-end"><strong>{{ user.comments|length }}</strong></td>
+                    </tr>
+                </table>
+
+                <hr>
+
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('main.user_profile', user_id=user.id) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye me-1"></i>ดูโปรไฟล์
+                    </a>
+                    <a href="{{ url_for('admin.user_permissions', user_id=user.id) }}" class="btn btn-outline-info btn-sm">
+                        <i class="fas fa-shield-alt me-1"></i>จัดการสิทธิ์
+                    </a>
+                    <a href="{{ url_for('admin.audit_logs') }}?user_id={{ user.id }}" class="btn btn-outline-secondary btn-sm">
+                        <i class="fas fa-history me-1"></i>ประวัติการใช้งาน
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card {% if user %}mt-3{% endif %}">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-question-circle me-2"></i>คำแนะนำ
+                </h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i>
+                        ชื่อผู้ใช้ต้องไม่ซ้ำกัน
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i>
+                        อีเมลต้องเป็นรูปแบบที่ถูกต้อง
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i>
+                        รหัสผ่านควรมีความยาวอย่างน้อย 8 ตัวอักษร
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-check text-success"></i>
+                        ผู้ดูแลระบบมีสิทธิ์เข้าถึงทุกฟังก์ชัน
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

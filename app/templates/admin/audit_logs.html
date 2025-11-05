@@ -1,0 +1,76 @@
+{% extends "admin/base.html" %}
+
+{% block title %}บันทึกการใช้งาน{% endblock %}
+{% block page_title %}บันทึกการใช้งาน{% endblock %}
+{% block content_title %}บันทึกการใช้งาน (Audit Logs){% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">บันทึกการใช้งาน</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">
+            <i class="fas fa-history me-2"></i>กิจกรรมทั้งหมด
+        </h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ผู้ใช้</th>
+                        <th>การกระทำ</th>
+                        <th>ทรัพยากร</th>
+                        <th>รายละเอียด</th>
+                        <th>IP Address</th>
+                        <th>เวลา</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td>{{ log.id }}</td>
+                        <td>
+                            {% if log.user %}
+                                <a href="{{ url_for('admin.user_edit', user_id=log.user.id) }}" class="text-decoration-none">
+                                    <i class="fas fa-user-circle text-primary"></i> {{ log.user.username }}
+                                </a>
+                            {% else %}
+                                <i class="fas fa-user-circle text-muted"></i> <em>ไม่ระบุ</em>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge
+                                {% if 'create' in log.action.lower() or 'add' in log.action.lower() %}bg-success
+                                {% elif 'update' in log.action.lower() or 'edit' in log.action.lower() %}bg-info
+                                {% elif 'delete' in log.action.lower() %}bg-danger
+                                {% elif 'view' in log.action.lower() %}bg-secondary
+                                {% else %}bg-primary{% endif %}">
+                                {{ log.action }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if log.resource_type %}
+                                <code>{{ log.resource_type }} #{{ log.resource_id }}</code>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ log.details[:50] if log.details else '-' }}</td>
+                        <td><code>{{ log.ip_address }}</code></td>
+                        <td>{{ log.created_at.strftime('%d/%m/%Y %H:%M:%S') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">ไม่มีข้อมูล</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

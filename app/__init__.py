@@ -40,11 +40,13 @@ def create_app(config_name='default'):
     # Register Blueprints
     from app.routes import main_bp, auth_bp, research_bp
     from app.api import api_bp
+    from app.admin_routes import admin_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(research_bp, url_prefix='/research')
     app.register_blueprint(api_bp)  # API routes with /api/v1 prefix
+    app.register_blueprint(admin_bp)  # Admin routes with /admin prefix
 
     # สร้างตารางในฐานข้อมูล
     with app.app_context():

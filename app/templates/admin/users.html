@@ -1,0 +1,234 @@
+{% extends "admin/base.html" %}
+
+{% block title %}จัดการผู้ใช้งาน{% endblock %}
+{% block page_title %}จัดการผู้ใช้งาน{% endblock %}
+{% block content_title %}จัดการผู้ใช้งาน{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">ผู้ใช้งาน</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-users me-2"></i>รายชื่อผู้ใช้งานทั้งหมด
+        </h5>
+        <a href="{{ url_for('admin.user_create') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>เพิ่มผู้ใช้ใหม่
+        </a>
+    </div>
+    <div class="card-body">
+        <!-- Search and Filter -->
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="ค้นหาผู้ใช้...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="roleFilter">
+                    <option value="">ทุกบทบาท</option>
+                    {% for role in all_roles %}
+                    <option value="{{ role.name }}">{{ role.display_name or role.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="statusFilter">
+                    <option value="">ทุกสถานะ</option>
+                    <option value="active">ใช้งานอยู่</option>
+                    <option value="inactive">ไม่ใช้งาน</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="table-responsive">
+            <table class="table table-hover" id="usersTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ชื่อผู้ใช้</th>
+                        <th>อีเมล</th>
+                        <th>ชื่อเต็ม</th>
+                        <th>บทบาท</th>
+                        <th>สถานะ</th>
+                        <th>วันที่สมัคร</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="user-avatar me-2" style="width: 32px; height: 32px; font-size: 0.9rem;">
+                                    {{ user.username[0].upper() }}
+                                </div>
+                                <strong>{{ user.username }}</strong>
+                            </div>
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.full_name or '-' }}</td>
+                        <td>
+                            {% if user.roles %}
+                                {% for role in user.roles %}
+                                    <span class="badge bg-primary me-1">{{ role.display_name or role.name }}</span>
+                                {% endfor %}
+                            {% else %}
+                                {% if user.is_admin %}
+                                    <span class="badge bg-danger">Admin</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">User</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle"></i> ใช้งานอยู่
+                            </span>
+                        </td>
+                        <td>{{ user.created_at.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ url_for('admin.user_edit', user_id=user.id) }}"
+                                   class="btn btn-outline-primary"
+                                   title="แก้ไข">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{{ url_for('admin.user_permissions', user_id=user.id) }}"
+                                   class="btn btn-outline-info"
+                                   title="จัดการสิทธิ์">
+                                    <i class="fas fa-shield-alt"></i>
+                                </a>
+                                {% if user.id != current_user.id %}
+                                <button class="btn btn-outline-danger"
+                                        onclick="deleteUser({{ user.id }}, '{{ user.username }}')"
+                                        title="ลบ">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">ไม่มีข้อมูลผู้ใช้</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if users %}
+        <nav>
+            <ul class="pagination justify-content-end">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">ก่อนหน้า</a>
+                </li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="#">ถัดไป</a>
+                </li>
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mt-4">
+    <div class="col-md-3">
+        <div class="info-box">
+            <div class="info-box-icon bg-primary">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="info-box-content">
+                <span class="info-box-text">ผู้ใช้ทั้งหมด</span>
+                <span class="info-box-number">{{ users|length }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="info-box">
+            <div class="info-box-icon bg-success">
+                <i class="fas fa-user-check"></i>
+            </div>
+            <div class="info-box-content">
+                <span class="info-box-text">ผู้ใช้ใหม่ (7 วัน)</span>
+                <span class="info-box-number">{{ new_users_count }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="info-box">
+            <div class="info-box-icon bg-warning">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="info-box-content">
+                <span class="info-box-text">ผู้ดูแลระบบ</span>
+                <span class="info-box-number">{{ admin_count }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="info-box">
+            <div class="info-box-icon bg-info">
+                <i class="fas fa-user-clock"></i>
+            </div>
+            <div class="info-box-content">
+                <span class="info-box-text">ออนไลน์</span>
+                <span class="info-box-number">{{ online_count }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll('#usersTable tbody tr');
+
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(searchTerm) ? '' : 'none';
+        });
+    });
+
+    // Delete user confirmation
+    function deleteUser(userId, username) {
+        if (confirm(`คุณต้องการลบผู้ใช้ "${username}" หรือไม่?\n\nการกระทำนี้ไม่สามารถย้อนกลับได้`)) {
+            // Send delete request
+            fetch(`{{ url_for('admin.user_delete', user_id=0) }}`.replace('0', userId), {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('ลบผู้ใช้สำเร็จ');
+                    location.reload();
+                } else {
+                    alert('เกิดข้อผิดพลาด: ' + data.message);
+                }
+            })
+            .catch(error => {
+                alert('เกิดข้อผิดพลาดในการลบผู้ใช้');
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>
+{% endblock %}

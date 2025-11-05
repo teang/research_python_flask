@@ -132,3 +132,25 @@ class AdvancedSearchForm(FlaskForm):
                          ],
                          default='created_at')
     submit = SubmitField('ค้นหา')
+
+
+class AdminUserForm(FlaskForm):
+    """ฟอร์มสำหรับ Admin จัดการผู้ใช้"""
+    username = StringField('ชื่อผู้ใช้', validators=[DataRequired(), Length(min=3, max=80)])
+    email = StringField('อีเมล', validators=[DataRequired(), Email()])
+    full_name = StringField('ชื่อ-นามสกุล', validators=[Optional(), Length(max=150)])
+    password = PasswordField('รหัสผ่าน', validators=[Optional(), Length(min=6)])
+    confirm_password = PasswordField('ยืนยันรหัสผ่าน',
+                                    validators=[Optional(), EqualTo('password', message='รหัสผ่านไม่ตรงกัน')])
+    bio = TextAreaField('ประวัติส่วนตัว', validators=[Optional()])
+    is_admin = BooleanField('ผู้ดูแลระบบ')
+    email_notifications = BooleanField('รับการแจ้งเตือนทางอีเมล')
+    submit = SubmitField('บันทึก')
+
+
+class PasswordChangeForm(FlaskForm):
+    """ฟอร์มสำหรับเปลี่ยนรหัสผ่าน"""
+    new_password = PasswordField('รหัสผ่านใหม่', validators=[DataRequired(), Length(min=6)])
+    confirm_new_password = PasswordField('ยืนยันรหัสผ่านใหม่',
+                                        validators=[DataRequired(), EqualTo('new_password', message='รหัสผ่านไม่ตรงกัน')])
+    submit = SubmitField('เปลี่ยนรหัสผ่าน')
