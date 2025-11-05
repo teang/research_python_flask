@@ -31,55 +31,55 @@
     <nav class="bg-blue-600 text-white shadow-lg">
         <div class="container mx-auto px-4">
             <div class="flex items-center justify-between py-4">
-                <a class="text-xl font-bold flex items-center hover:text-blue-100 transition" href="{{ url_for('main.index') }}">
+                <a class="text-xl font-bold font-heading flex items-center hover:text-blue-100 transition" href="{{ url_for('main.index') }}">
                     <i class="fas fa-book-open mr-2"></i> ระบบจัดเก็บงานวิจัย
                 </a>
                 <button class="lg:hidden text-white focus:outline-none" id="mobile-menu-button">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
                 <div class="hidden lg:flex items-center space-x-1" id="navbar-menu">
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('main.index') }}">หน้าแรก</a>
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('research.list') }}">งานวิจัยทั้งหมด</a>
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('research.categories') }}">หมวดหมู่</a>
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('main.index') }}">หน้าแรก</a>
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('research.list') }}">งานวิจัยทั้งหมด</a>
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('research.categories') }}">หมวดหมู่</a>
 
                     {% if current_user.is_authenticated %}
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('main.dashboard') }}">
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('main.dashboard') }}">
                         <i class="fas fa-tachometer-alt"></i> แดชบอร์ด
                     </a>
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('research.add') }}">
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('research.add') }}">
                         <i class="fas fa-plus-circle"></i> เพิ่มงานวิจัย
                     </a>
                     <div class="relative group">
-                        <button class="px-3 py-2 rounded hover:bg-blue-700 transition flex items-center">
+                        <button class="px-3 py-2 rounded hover:bg-blue-700 transition flex items-center font-heading">
                             <i class="fas fa-user-circle mr-1"></i> {{ current_user.username }}
                             <i class="fas fa-chevron-down ml-1 text-xs"></i>
                         </button>
                         <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 hidden group-hover:block z-50">
-                            <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100" href="{{ url_for('auth.logout') }}">ออกจากระบบ</a>
+                            <a class="block px-4 py-2 text-gray-700 hover:bg-gray-100 font-heading" href="{{ url_for('auth.logout') }}">ออกจากระบบ</a>
                         </div>
                     </div>
                     {% else %}
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('auth.login') }}">เข้าสู่ระบบ</a>
-                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('auth.register') }}">ลงทะเบียน</a>
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('auth.login') }}">เข้าสู่ระบบ</a>
+                    <a class="px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('auth.register') }}">ลงทะเบียน</a>
                     {% endif %}
                 </div>
             </div>
             <!-- Mobile menu -->
             <div class="lg:hidden hidden pb-4" id="mobile-menu">
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('main.index') }}">หน้าแรก</a>
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('research.list') }}">งานวิจัยทั้งหมด</a>
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('research.categories') }}">หมวดหมู่</a>
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('main.index') }}">หน้าแรก</a>
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('research.list') }}">งานวิจัยทั้งหมด</a>
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('research.categories') }}">หมวดหมู่</a>
                 {% if current_user.is_authenticated %}
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('main.dashboard') }}">
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('main.dashboard') }}">
                     <i class="fas fa-tachometer-alt"></i> แดชบอร์ด
                 </a>
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('research.add') }}">
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('research.add') }}">
                     <i class="fas fa-plus-circle"></i> เพิ่มงานวิจัย
                 </a>
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('auth.logout') }}">ออกจากระบบ</a>
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('auth.logout') }}">ออกจากระบบ</a>
                 {% else %}
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('auth.login') }}">เข้าสู่ระบบ</a>
-                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition" href="{{ url_for('auth.register') }}">ลงทะเบียน</a>
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('auth.login') }}">เข้าสู่ระบบ</a>
+                <a class="block px-3 py-2 rounded hover:bg-blue-700 transition font-heading" href="{{ url_for('auth.register') }}">ลงทะเบียน</a>
                 {% endif %}
             </div>
         </div>

@@ -10,6 +10,11 @@ h1, h2, h3, h4, h5, h6, .font-heading {
     font-family: 'Kanit', sans-serif;
 }
 
+/* Kanit สำหรับ navbar และ navigation elements */
+nav, nav a, nav button, nav span {
+    font-family: 'Kanit', sans-serif;
+}
+
 /* Additional custom styles that work with Tailwind CSS */
 /* These styles complement Tailwind and provide additional customization */
 

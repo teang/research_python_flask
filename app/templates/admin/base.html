@@ -41,8 +41,8 @@
             <a href="{{ url_for('admin.dashboard') }}" class="text-white no-underline">
                 <i class="fas fa-graduation-cap text-2xl"></i>
                 <div class="mt-2">
-                    <strong class="block text-lg">Admin Panel</strong>
-                    <span class="text-sm text-gray-400">Research Management</span>
+                    <strong class="block text-lg font-heading">Admin Panel</strong>
+                    <span class="text-sm text-gray-400 font-heading">Research Management</span>
                 </div>
             </a>
         </div>
@@ -50,7 +50,7 @@
         <ul class="py-4">
             <li class="px-4 py-2 text-xs text-gray-500 uppercase tracking-wider font-semibold">MAIN NAVIGATION</li>
             <li>
-                <a href="{{ url_for('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if request.endpoint == 'admin.dashboard' %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.dashboard') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if request.endpoint == 'admin.dashboard' %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-tachometer-alt w-6"></i>
                     <span>Dashboard</span>
                 </a>
@@ -58,19 +58,19 @@
 
             <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">USER MANAGEMENT</li>
             <li>
-                <a href="{{ url_for('admin.users') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'users' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.users') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'users' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-users w-6"></i>
                     <span>ผู้ใช้งาน</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.roles') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'roles' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.roles') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'roles' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-user-tag w-6"></i>
                     <span>บทบาท</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.permissions') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'permissions' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.permissions') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'permissions' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-shield-alt w-6"></i>
                     <span>สิทธิ์การใช้งาน</span>
                 </a>
@@ -78,19 +78,19 @@
 
             <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">CONTENT MANAGEMENT</li>
             <li>
-                <a href="{{ url_for('admin.researches') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'researches' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.researches') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'researches' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-book w-6"></i>
                     <span>งานวิจัย</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.categories') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'categories' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.categories') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'categories' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-folder w-6"></i>
                     <span>หมวดหมู่</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.comments') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'comments' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.comments') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'comments' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-comments w-6"></i>
                     <span>ความคิดเห็น</span>
                 </a>
@@ -98,13 +98,13 @@
 
             <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">SYSTEM</li>
             <li>
-                <a href="{{ url_for('admin.audit_logs') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'audit_logs' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.audit_logs') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'audit_logs' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-history w-6"></i>
                     <span>บันทึกการใช้งาน</span>
                 </a>
             </li>
             <li>
-                <a href="{{ url_for('admin.settings') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all {% if 'settings' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
+                <a href="{{ url_for('admin.settings') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading {% if 'settings' in request.endpoint %}bg-blue-600 text-white border-l-4 border-blue-400{% endif %}">
                     <i class="fas fa-cog w-6"></i>
                     <span>ตั้งค่า</span>
                 </a>
@@ -112,7 +112,7 @@
 
             <li class="px-4 py-2 mt-4 text-xs text-gray-500 uppercase tracking-wider font-semibold">OTHER</li>
             <li>
-                <a href="{{ url_for('main.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all">
+                <a href="{{ url_for('main.index') }}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 hover:text-white hover:pl-6 transition-all font-heading">
                     <i class="fas fa-home w-6"></i>
                     <span>กลับหน้าหลัก</span>
                 </a>
@@ -128,7 +128,7 @@
                 <button id="sidebarToggle" class="text-gray-600 hover:text-gray-800 focus:outline-none lg:hidden">
                     <i class="fas fa-bars text-2xl"></i>
                 </button>
-                <h5 class="text-lg font-semibold text-gray-800">{% block page_title %}Dashboard{% endblock %}</h5>
+                <h5 class="text-lg font-semibold text-gray-800 font-heading">{% block page_title %}Dashboard{% endblock %}</h5>
             </div>
 
             <div class="flex items-center gap-4">
@@ -138,15 +138,15 @@
                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">3</span>
                     </button>
                     <div class="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block z-50">
-                        <h6 class="px-4 py-2 text-sm font-semibold text-gray-700 border-b">แจ้งเตือน</h6>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <h6 class="px-4 py-2 text-sm font-semibold text-gray-700 border-b font-heading">แจ้งเตือน</h6>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-heading">
                             <i class="fas fa-info-circle text-blue-500 mr-2"></i> แจ้งเตือนใหม่ 1
                         </a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-heading">
                             <i class="fas fa-info-circle text-blue-500 mr-2"></i> แจ้งเตือนใหม่ 2
                         </a>
                         <div class="border-t"></div>
-                        <a href="#" class="block px-4 py-2 text-sm text-center text-blue-600 hover:bg-gray-100">ดูทั้งหมด</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-center text-blue-600 hover:bg-gray-100 font-heading">ดูทั้งหมด</a>
                     </div>
                 </div>
 
@@ -159,15 +159,15 @@
                         <i class="fas fa-chevron-down text-xs"></i>
                     </button>
                     <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden group-hover:block z-50">
-                        <h6 class="px-4 py-2 text-sm font-semibold text-gray-700 border-b">{{ current_user.full_name or current_user.username }}</h6>
-                        <a href="{{ url_for('main.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <h6 class="px-4 py-2 text-sm font-semibold text-gray-700 border-b font-heading">{{ current_user.full_name or current_user.username }}</h6>
+                        <a href="{{ url_for('main.profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-heading">
                             <i class="fas fa-user mr-2"></i> โปรไฟล์
                         </a>
-                        <a href="{{ url_for('main.edit_profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <a href="{{ url_for('main.edit_profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-heading">
                             <i class="fas fa-cog mr-2"></i> ตั้งค่า
                         </a>
                         <div class="border-t"></div>
-                        <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">
+                        <a href="{{ url_for('auth.logout') }}" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 font-heading">
                             <i class="fas fa-sign-out-alt mr-2"></i> ออกจากระบบ
                         </a>
                     </div>
