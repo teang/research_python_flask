@@ -6,15 +6,24 @@
     <title>{% block title %}ระบบจัดเก็บงานวิจัย{% endblock %}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts - Kanit & Sarabun -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
     <style>
         body {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            font-family: 'Sarabun', sans-serif;
         }
         .content {
             flex: 1;
+        }
+        /* Kanit for headings */
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Kanit', sans-serif;
         }
     </style>
 </head>
