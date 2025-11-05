@@ -5,7 +5,7 @@
 {% block content %}
 <div class="row">
     <div class="col-12">
-        <h1><i class="bi bi-speedometer2"></i> แดชบอร์ด</h1>
+        <h1><i class="fas fa-tachometer-alt"></i> แดชบอร์ด</h1>
         <p class="lead">ยินดีต้อนรับ, {{ current_user.full_name or current_user.username }}!</p>
         <hr>
     </div>
@@ -15,7 +15,7 @@
     <div class="col-md-6">
         <div class="card bg-primary text-white">
             <div class="card-body">
-                <h5 class="card-title">งานวิจัยของคุณ</h5>
+                <h5 class="card-title"><i class="fas fa-folder-open"></i> งานวิจัยของคุณ</h5>
                 <p class="card-text display-4">{{ researches|length }}</p>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="card-body">
                 <h5 class="card-title">เพิ่มงานวิจัยใหม่</h5>
                 <a href="{{ url_for('research.add') }}" class="btn btn-light mt-3">
-                    <i class="bi bi-plus-circle"></i> เพิ่มเลย
+                    <i class="fas fa-plus-circle"></i> เพิ่มเลย
                 </a>
             </div>
         </div>
@@ -60,12 +60,12 @@
                         <td>{{ research.created_at.strftime('%d/%m/%Y') }}</td>
                         <td>
                             <a href="{{ url_for('research.edit', id=research.id) }}" class="btn btn-sm btn-warning">
-                                <i class="bi bi-pencil"></i>
+                                <i class="fas fa-edit"></i>
                             </a>
                             <form method="POST" action="{{ url_for('research.delete', id=research.id) }}" style="display: inline;">
                                 <button type="submit" class="btn btn-sm btn-danger"
                                         onclick="return confirm('แน่ใจหรือไม่ว่าต้องการลบ?')">
-                                    <i class="bi bi-trash"></i>
+                                    <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
                         </td>
@@ -76,7 +76,7 @@
         </div>
         {% else %}
         <div class="alert alert-info">
-            <i class="bi bi-info-circle"></i> คุณยังไม่มีงานวิจัย
+            <i class="fas fa-info-circle"></i> คุณยังไม่มีงานวิจัย
             <a href="{{ url_for('research.add') }}" class="alert-link">เพิ่มงานวิจัยแรกของคุณ</a>
         </div>
         {% endif %}

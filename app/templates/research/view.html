@@ -19,7 +19,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header bg-primary text-white">
-                <h4 class="mb-0"><i class="bi bi-journal-text"></i> รายละเอียดงานวิจัย</h4>
+                <h4 class="mb-0"><i class="fas fa-file-alt"></i> รายละเอียดงานวิจัย</h4>
             </div>
             <div class="card-body">
                 <h2>{{ research.title }}</h2>
@@ -30,15 +30,15 @@
 
                 <div class="row mb-3">
                     <div class="col-md-6">
-                        <strong><i class="bi bi-person"></i> ผู้วิจัย:</strong><br>
+                        <strong><i class="fas fa-user"></i> ผู้วิจัย:</strong><br>
                         {{ research.authors }}
                     </div>
                     <div class="col-md-3">
-                        <strong><i class="bi bi-calendar"></i> ปีที่เผยแพร่:</strong><br>
+                        <strong><i class="fas fa-calendar-alt"></i> ปีที่เผยแพร่:</strong><br>
                         {{ research.year or 'ไม่ระบุ' }}
                     </div>
                     <div class="col-md-3">
-                        <strong><i class="bi bi-folder"></i> หมวดหมู่:</strong><br>
+                        <strong><i class="fas fa-folder"></i> หมวดหมู่:</strong><br>
                         {% if research.category %}
                             <a href="{{ url_for('research.list', category=research.category.id) }}">
                                 {{ research.category.name }}
@@ -51,14 +51,14 @@
 
                 {% if research.publication_type %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-bookmark"></i> ประเภทการตีพิมพ์:</strong><br>
+                    <strong><i class="fas fa-bookmark"></i> ประเภทการตีพิมพ์:</strong><br>
                     {{ research.publication_type }}
                 </div>
                 {% endif %}
 
                 {% if research.journal_name %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-journal"></i> วารสาร/การประชุม:</strong><br>
+                    <strong><i class="fas fa-newspaper"></i> วารสาร/การประชุม:</strong><br>
                     {{ research.journal_name }}
                     {% if research.volume %} (เล่ม {{ research.volume }}{% endif %}
                     {% if research.issue %}, ฉบับ {{ research.issue }}{% endif %}
@@ -69,14 +69,14 @@
 
                 {% if research.abstract %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-file-text"></i> บทคัดย่อ:</strong><br>
+                    <strong><i class="fas fa-align-left"></i> บทคัดย่อ:</strong><br>
                     <p class="text-justify">{{ research.abstract }}</p>
                 </div>
                 {% endif %}
 
                 {% if research.keywords %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-tags"></i> คำสำคัญ:</strong><br>
+                    <strong><i class="fas fa-tags"></i> คำสำคัญ:</strong><br>
                     {% for keyword in research.keywords.split(',') %}
                         <span class="badge bg-info text-dark me-1">{{ keyword.strip() }}</span>
                     {% endfor %}
@@ -85,43 +85,43 @@
 
                 {% if research.doi %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-link-45deg"></i> DOI:</strong><br>
+                    <strong><i class="fas fa-link"></i> DOI:</strong><br>
                     <a href="https://doi.org/{{ research.doi }}" target="_blank">{{ research.doi }}</a>
                 </div>
                 {% endif %}
 
                 {% if research.url %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-globe"></i> URL:</strong><br>
+                    <strong><i class="fas fa-globe"></i> URL:</strong><br>
                     <a href="{{ research.url }}" target="_blank">{{ research.url }}</a>
                 </div>
                 {% endif %}
 
                 {% if research.file_path %}
                 <div class="mb-3">
-                    <strong><i class="bi bi-file-pdf"></i> ไฟล์:</strong><br>
+                    <strong><i class="fas fa-file-pdf"></i> ไฟล์:</strong><br>
                     {{ research.file_path }}
                 </div>
                 {% endif %}
 
                 <hr>
                 <small class="text-muted">
-                    <i class="bi bi-person-circle"></i> เพิ่มโดย: {{ research.uploader.full_name or research.uploader.username }} |
-                    <i class="bi bi-clock"></i> เพิ่มเมื่อ: {{ research.created_at.strftime('%d/%m/%Y %H:%M') }}
+                    <i class="fas fa-user-circle"></i> เพิ่มโดย: {{ research.uploader.full_name or research.uploader.username }} |
+                    <i class="fas fa-clock"></i> เพิ่มเมื่อ: {{ research.created_at.strftime('%d/%m/%Y %H:%M') }}
                     {% if research.updated_at != research.created_at %}
-                    | <i class="bi bi-pencil"></i> แก้ไขล่าสุด: {{ research.updated_at.strftime('%d/%m/%Y %H:%M') }}
+                    | <i class="fas fa-edit"></i> แก้ไขล่าสุด: {{ research.updated_at.strftime('%d/%m/%Y %H:%M') }}
                     {% endif %}
                 </small>
             </div>
             {% if current_user.is_authenticated and (current_user.id == research.user_id or current_user.is_admin) %}
             <div class="card-footer">
                 <a href="{{ url_for('research.edit', id=research.id) }}" class="btn btn-warning">
-                    <i class="bi bi-pencil"></i> แก้ไข
+                    <i class="fas fa-edit"></i> แก้ไข
                 </a>
                 <form method="POST" action="{{ url_for('research.delete', id=research.id) }}" style="display: inline;">
                     <button type="submit" class="btn btn-danger"
                             onclick="return confirm('แน่ใจหรือไม่ว่าต้องการลบงานวิจัยนี้?')">
-                        <i class="bi bi-trash"></i> ลบ
+                        <i class="fas fa-trash-alt"></i> ลบ
                     </button>
                 </form>
             </div>
