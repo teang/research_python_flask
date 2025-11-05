@@ -1,0 +1,94 @@
+{% extends "admin/base.html" %}
+
+{% block title %}จัดการงานวิจัย{% endblock %}
+{% block page_title %}จัดการงานวิจัย{% endblock %}
+{% block content_title %}จัดการงานวิจัยทั้งหมด{% endblock %}
+
+{% block breadcrumb %}
+<li class="breadcrumb-item active">งานวิจัย</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">
+            <i class="fas fa-book me-2"></i>รายการงานวิจัยทั้งหมด
+        </h5>
+        <a href="{{ url_for('research.add') }}" class="btn btn-primary">
+            <i class="fas fa-plus me-1"></i>เพิ่มงานวิจัยใหม่
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ชื่องานวิจัย</th>
+                        <th>ผู้เขียน</th>
+                        <th>หมวดหมู่</th>
+                        <th>ผู้อัปโหลด</th>
+                        <th>วันที่</th>
+                        <th>ดู/ดาวน์โหลด</th>
+                        <th>จัดการ</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for research in researches %}
+                    <tr>
+                        <td>{{ research.id }}</td>
+                        <td>
+                            <a href="{{ url_for('research.view', id=research.id) }}" class="text-decoration-none">
+                                {{ research.title[:60] }}{% if research.title|length > 60 %}...{% endif %}
+                            </a>
+                        </td>
+                        <td>{{ research.authors[:40] }}{% if research.authors|length > 40 %}...{% endif %}</td>
+                        <td>
+                            {% if research.category %}
+                                <span class="badge bg-primary">{{ research.category.name }}</span>
+                            {% else %}
+                                <span class="badge bg-secondary">ไม่มี</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('admin.user_edit', user_id=research.user_id) }}" class="text-decoration-none">
+                                {{ research.uploader.username }}
+                            </a>
+                        </td>
+                        <td>{{ research.created_at.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ research.view_count }} ดู</span>
+                            <span class="badge bg-success">{{ research.download_count }} DL</span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{{ url_for('research.view', id=research.id) }}"
+                                   class="btn btn-outline-info"
+                                   title="ดู">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('research.edit', id=research.id) }}"
+                                   class="btn btn-outline-primary"
+                                   title="แก้ไข">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="{{ url_for('research.delete', id=research.id) }}"
+                                   class="btn btn-outline-danger"
+                                   onclick="return confirm('คุณต้องการลบงานวิจัยนี้หรือไม่?')"
+                                   title="ลบ">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center text-muted">ไม่มีข้อมูลงานวิจัย</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
