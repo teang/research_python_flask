@@ -6,3 +6,24 @@ WTForms==3.1.1
 email-validator==2.1.0
 python-dotenv==1.0.0
 Werkzeug==3.0.1
+
+# Database migrations
+Flask-Migrate==4.0.5
+
+# File handling
+Flask-Uploads==0.2.1
+
+# Export functionality
+pandas==2.1.4
+openpyxl==3.1.2
+bibtexparser==1.4.1
+
+# REST API
+Flask-CORS==4.0.0
+Flask-RESTful==0.3.10
+
+# Email notifications
+Flask-Mail==0.9.1
+
+# PDF handling
+PyPDF2==3.0.1

@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField, SubmitField
-from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional, ValidationError
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, PasswordField, TextAreaField, SelectField, IntegerField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Email, EqualTo, Length, Optional, ValidationError, NumberRange
 from app.models import User
 
 
@@ -59,6 +60,9 @@ class ResearchForm(FlaskForm):
     doi = StringField('DOI', validators=[Optional(), Length(max=200)])
     url = StringField('URL', validators=[Optional(), Length(max=500)])
     file_path = StringField('ที่อยู่ไฟล์', validators=[Optional(), Length(max=500)])
+    pdf_file = FileField('อัพโหลดไฟล์ PDF', validators=[Optional(), FileAllowed(['pdf'], 'รองรับเฉพาะไฟล์ PDF เท่านั้น!')])
+    tags = StringField('แท็ก', validators=[Optional(), Length(max=200)],
+                      description='คั่นด้วยเครื่องหมายจุลภาค')
     category_id = SelectField('หมวดหมู่', coerce=int, validators=[Optional()])
     submit = SubmitField('บันทึก')
 
@@ -68,3 +72,63 @@ class CategoryForm(FlaskForm):
     name = StringField('ชื่อหมวดหมู่', validators=[DataRequired(), Length(max=100)])
     description = TextAreaField('รายละเอียด', validators=[Optional()])
     submit = SubmitField('บันทึก')
+
+
+class CommentForm(FlaskForm):
+    """ฟอร์มสำหรับแสดงความคิดเห็น"""
+    content = TextAreaField('ความคิดเห็น', validators=[DataRequired(), Length(min=3, max=1000)])
+    rating = SelectField('คะแนน',
+                        choices=[(0, 'ไม่ให้คะแนน'), (1, '1'), (2, '2'), (3, '3'), (4, '4'), (5, '5')],
+                        coerce=int,
+                        validators=[Optional()])
+    submit = SubmitField('ส่งความคิดเห็น')
+
+
+class ProfileForm(FlaskForm):
+    """ฟอร์มสำหรับแก้ไขโปรไฟล์"""
+    full_name = StringField('ชื่อ-นามสกุล', validators=[DataRequired(), Length(max=150)])
+    email = StringField('อีเมล', validators=[DataRequired(), Email()])
+    bio = TextAreaField('ประวัติส่วนตัว', validators=[Optional(), Length(max=500)])
+    avatar = FileField('รูปโปรไฟล์', validators=[Optional(), FileAllowed(['jpg', 'jpeg', 'png'], 'รองรับเฉพาะไฟล์รูปภาพ!')])
+    email_notifications = BooleanField('รับการแจ้งเตือนทางอีเมล')
+    submit = SubmitField('บันทึก')
+
+    def __init__(self, original_email, *args, **kwargs):
+        super(ProfileForm, self).__init__(*args, **kwargs)
+        self.original_email = original_email
+
+    def validate_email(self, email):
+        if email.data != self.original_email:
+            user = User.query.filter_by(email=email.data).first()
+            if user:
+                raise ValidationError('อีเมลนี้ถูกใช้งานแล้ว')
+
+
+class AdvancedSearchForm(FlaskForm):
+    """ฟอร์มสำหรับค้นหาขั้นสูง"""
+    search = StringField('คำค้นหา', validators=[Optional()])
+    category_id = SelectField('หมวดหมู่', coerce=int, validators=[Optional()])
+    publication_type = SelectField('ประเภทการตีพิมพ์',
+                                  choices=[
+                                      ('', 'ทั้งหมด'),
+                                      ('journal', 'วารสารวิชาการ'),
+                                      ('conference', 'การประชุมวิชาการ'),
+                                      ('thesis', 'วิทยานิพนธ์'),
+                                      ('report', 'รายงานวิจัย'),
+                                      ('other', 'อื่นๆ')
+                                  ],
+                                  validators=[Optional()])
+    year_from = IntegerField('ปีเริ่มต้น', validators=[Optional()])
+    year_to = IntegerField('ปีสิ้นสุด', validators=[Optional()])
+    tags = StringField('แท็ก', validators=[Optional()])
+    sort_by = SelectField('เรียงลำดับตาม',
+                         choices=[
+                             ('created_at', 'วันที่สร้าง (ใหม่-เก่า)'),
+                             ('created_at_asc', 'วันที่สร้าง (เก่า-ใหม่)'),
+                             ('title', 'ชื่อ (ก-ฮ)'),
+                             ('year', 'ปี (มาก-น้อย)'),
+                             ('year_asc', 'ปี (น้อย-มาก)'),
+                             ('view_count', 'ความนิยม')
+                         ],
+                         default='created_at')
+    submit = SubmitField('ค้นหา')
