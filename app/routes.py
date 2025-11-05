@@ -267,6 +267,16 @@ def add():
                 file_path = filepath
                 file_size = filesize
 
+        # Auto-detect format from file if not provided
+        file_format = None
+        if file_path:
+            if file_path.lower().endswith('.pdf'):
+                file_format = 'application/pdf'
+            elif file_path.lower().endswith('.docx'):
+                file_format = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            elif file_path.lower().endswith('.doc'):
+                file_format = 'application/msword'
+
         research = Research(
             title=form.title.data,
             title_en=form.title_en.data,
@@ -284,7 +294,16 @@ def add():
             file_path=file_path,
             file_size=file_size,
             category_id=form.category_id.data if form.category_id.data != 0 else None,
-            user_id=current_user.id
+            user_id=current_user.id,
+            # Dublin Core fields
+            publisher=form.publisher.data,
+            contributor=form.contributor.data,
+            format=file_format,
+            source=form.source.data,
+            language=form.language.data,
+            relation=form.relation.data,
+            coverage=form.coverage.data,
+            rights=form.rights.data
         )
         db.session.add(research)
 
@@ -355,6 +374,24 @@ def edit(id):
         research.doi = form.doi.data
         research.url = form.url.data
         research.category_id = form.category_id.data if form.category_id.data != 0 else None
+
+        # Dublin Core fields
+        research.publisher = form.publisher.data
+        research.contributor = form.contributor.data
+        research.source = form.source.data
+        research.language = form.language.data
+        research.relation = form.relation.data
+        research.coverage = form.coverage.data
+        research.rights = form.rights.data
+
+        # Update format if file changed
+        if research.file_path and not research.format:
+            if research.file_path.lower().endswith('.pdf'):
+                research.format = 'application/pdf'
+            elif research.file_path.lower().endswith('.docx'):
+                research.format = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            elif research.file_path.lower().endswith('.doc'):
+                research.format = 'application/msword'
 
         # จัดการแท็ก
         research.tags.clear()
@@ -500,6 +537,96 @@ def export_ris():
     """ส่งออกงานวิจัยเป็น RIS"""
     researches = Research.query.all()
     return export_researches_ris(researches)
+
+
+@research_bp.route('/<int:id>/export/dublin-core/xml')
+def export_dublin_core_xml_single(id):
+    """ส่งออกงานวิจัยเดี่ยวเป็น Dublin Core XML"""
+    from flask import Response
+    research = Research.query.get_or_404(id)
+    xml_content = research.to_dublin_core_xml()
+
+    return Response(
+        xml_content,
+        mimetype='application/xml',
+        headers={
+            'Content-Disposition': f'attachment; filename=dublin_core_{research.id}.xml'
+        }
+    )
+
+
+@research_bp.route('/<int:id>/export/dublin-core/json')
+def export_dublin_core_json_single(id):
+    """ส่งออกงานวิจัยเดี่ยวเป็น Dublin Core JSON"""
+    from flask import Response
+    research = Research.query.get_or_404(id)
+    json_content = research.to_dublin_core_json()
+
+    return Response(
+        json_content,
+        mimetype='application/json',
+        headers={
+            'Content-Disposition': f'attachment; filename=dublin_core_{research.id}.json'
+        }
+    )
+
+
+@research_bp.route('/export/dublin-core-xml')
+def export_dublin_core_xml_all():
+    """ส่งออกงานวิจัยทั้งหมดเป็น Dublin Core XML"""
+    from flask import Response
+    import xml.etree.ElementTree as ET
+
+    researches = Research.query.all()
+
+    # สร้าง root collection element
+    root = ET.Element('collection', {
+        'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+        'xmlns:dcterms': 'http://purl.org/dc/terms/'
+    })
+
+    # เพิ่มแต่ละงานวิจัย
+    for research in researches:
+        # แปลง XML string กลับเป็น Element
+        research_xml = research.to_dublin_core_xml()
+        # ลบ XML declaration ออกและแปลงเป็น Element
+        research_xml = research_xml.split('?>', 1)[1] if '?>' in research_xml else research_xml
+        research_element = ET.fromstring(research_xml)
+        root.append(research_element)
+
+    ET.indent(root, space='  ')
+    xml_string = ET.tostring(root, encoding='unicode', xml_declaration=True)
+
+    return Response(
+        xml_string,
+        mimetype='application/xml',
+        headers={
+            'Content-Disposition': 'attachment; filename=dublin_core_collection.xml'
+        }
+    )
+
+
+@research_bp.route('/export/dublin-core-json')
+def export_dublin_core_json_all():
+    """ส่งออกงานวิจัยทั้งหมดเป็น Dublin Core JSON"""
+    from flask import Response, jsonify
+    import json
+
+    researches = Research.query.all()
+    collection = {
+        'collection': [research.to_dublin_core_dict() for research in researches],
+        'total': len(researches)
+    }
+
+    json_content = json.dumps(collection, ensure_ascii=False, indent=2)
+
+    return Response(
+        json_content,
+        mimetype='application/json',
+        headers={
+            'Content-Disposition': 'attachment; filename=dublin_core_collection.json'
+        }
+    )
 
 
 # ============================================

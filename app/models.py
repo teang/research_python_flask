@@ -115,6 +115,16 @@ class Research(db.Model):
     file_path = db.Column(db.String(500))  # ที่เก็บไฟล์ PDF
     file_size = db.Column(db.Integer)  # ขนาดไฟล์ (bytes)
 
+    # Dublin Core Metadata Fields
+    publisher = db.Column(db.String(200))  # DC.Publisher - ผู้เผยแพร่
+    contributor = db.Column(db.Text)  # DC.Contributor - ผู้มีส่วนร่วม (ที่ปรึกษา, บรรณาธิการ)
+    format = db.Column(db.String(100))  # DC.Format - รูปแบบไฟล์ (MIME type)
+    source = db.Column(db.String(500))  # DC.Source - แหล่งที่มา
+    language = db.Column(db.String(10), default='th')  # DC.Language - ภาษา (ISO 639-1)
+    relation = db.Column(db.Text)  # DC.Relation - ความสัมพันธ์กับทรัพยากรอื่น
+    coverage = db.Column(db.String(200))  # DC.Coverage - ขอบเขตภูมิศาสตร์/เวลา
+    rights = db.Column(db.String(200))  # DC.Rights - สิทธิ์/ลิขสิทธิ์
+
     # ข้อมูลเพิ่มเติม
     view_count = db.Column(db.Integer, default=0)  # จำนวนครั้งที่ถูกดู
     download_count = db.Column(db.Integer, default=0)  # จำนวนครั้งที่ถูกดาวน์โหลด
@@ -141,6 +151,124 @@ class Research(db.Model):
         """เพิ่มจำนวนการดาวน์โหลด"""
         self.download_count += 1
         db.session.commit()
+
+    def to_dublin_core_dict(self):
+        """แปลง Research เป็น Dublin Core Metadata Dictionary"""
+        # รวม keywords และ tags เป็น subject
+        subjects = []
+        if self.keywords:
+            subjects.extend([k.strip() for k in self.keywords.split(',')])
+        if self.tags:
+            subjects.extend([tag.name for tag in self.tags])
+
+        # กำหนด format จากไฟล์ path ถ้ายังไม่มี
+        file_format = self.format
+        if not file_format and self.file_path:
+            if self.file_path.lower().endswith('.pdf'):
+                file_format = 'application/pdf'
+            elif self.file_path.lower().endswith('.docx'):
+                file_format = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            elif self.file_path.lower().endswith('.doc'):
+                file_format = 'application/msword'
+
+        # สร้าง identifier จาก DOI หรือ URL
+        identifiers = []
+        if self.doi:
+            identifiers.append(f"doi:{self.doi}")
+        if self.url:
+            identifiers.append(self.url)
+        if self.id:
+            identifiers.append(f"local_id:{self.id}")
+
+        dc_metadata = {
+            'title': self.title or '',
+            'creator': self.authors or '',
+            'subject': subjects,
+            'description': self.abstract or '',
+            'publisher': self.publisher or '',
+            'contributor': self.contributor or '',
+            'date': str(self.year) if self.year else self.created_at.strftime('%Y-%m-%d'),
+            'type': self.publication_type or 'Text',
+            'format': file_format or '',
+            'identifier': identifiers,
+            'source': self.source or '',
+            'language': self.language or 'th',
+            'relation': self.relation or '',
+            'coverage': self.coverage or '',
+            'rights': self.rights or ''
+        }
+
+        return dc_metadata
+
+    def to_dublin_core_xml(self):
+        """Export เป็น Dublin Core XML"""
+        import xml.etree.ElementTree as ET
+
+        dc_data = self.to_dublin_core_dict()
+
+        # สร้าง root element พร้อม namespaces
+        root = ET.Element('metadata', {
+            'xmlns:dc': 'http://purl.org/dc/elements/1.1/',
+            'xmlns:dcterms': 'http://purl.org/dc/terms/'
+        })
+
+        # เพิ่ม elements
+        if dc_data['title']:
+            ET.SubElement(root, 'dc:title').text = dc_data['title']
+
+        if dc_data['creator']:
+            ET.SubElement(root, 'dc:creator').text = dc_data['creator']
+
+        for subject in dc_data['subject']:
+            if subject:
+                ET.SubElement(root, 'dc:subject').text = subject
+
+        if dc_data['description']:
+            ET.SubElement(root, 'dc:description').text = dc_data['description']
+
+        if dc_data['publisher']:
+            ET.SubElement(root, 'dc:publisher').text = dc_data['publisher']
+
+        if dc_data['contributor']:
+            ET.SubElement(root, 'dc:contributor').text = dc_data['contributor']
+
+        if dc_data['date']:
+            ET.SubElement(root, 'dc:date').text = dc_data['date']
+
+        if dc_data['type']:
+            ET.SubElement(root, 'dc:type').text = dc_data['type']
+
+        if dc_data['format']:
+            ET.SubElement(root, 'dc:format').text = dc_data['format']
+
+        for identifier in dc_data['identifier']:
+            if identifier:
+                ET.SubElement(root, 'dc:identifier').text = identifier
+
+        if dc_data['source']:
+            ET.SubElement(root, 'dc:source').text = dc_data['source']
+
+        if dc_data['language']:
+            ET.SubElement(root, 'dc:language').text = dc_data['language']
+
+        if dc_data['relation']:
+            ET.SubElement(root, 'dc:relation').text = dc_data['relation']
+
+        if dc_data['coverage']:
+            ET.SubElement(root, 'dc:coverage').text = dc_data['coverage']
+
+        if dc_data['rights']:
+            ET.SubElement(root, 'dc:rights').text = dc_data['rights']
+
+        # แปลงเป็น string
+        ET.indent(root, space='  ')
+        return ET.tostring(root, encoding='unicode', xml_declaration=True)
+
+    def to_dublin_core_json(self):
+        """Export เป็น Dublin Core JSON"""
+        import json
+        dc_data = self.to_dublin_core_dict()
+        return json.dumps(dc_data, ensure_ascii=False, indent=2)
 
 
 class Tag(db.Model):
