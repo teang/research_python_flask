@@ -34,9 +34,23 @@ def index():
 @main_bp.route('/dashboard')
 @login_required
 def dashboard():
-    """แดชบอร์ดผู้ใช้"""
-    user_researches = Research.query.filter_by(user_id=current_user.id).all()
-    return render_template('dashboard.html', researches=user_researches)
+    """แดชบอร์ดผู้ใช้ - AdminLTE Style"""
+    # ดึงงานวิจัยของผู้ใช้
+    user_researches = Research.query.filter_by(user_id=current_user.id)\
+        .order_by(Research.created_at.desc()).all()
+
+    # คำนวณสถิติต่างๆ
+    stats = {
+        'total_researches': len(user_researches),
+        'total_bookmarks': Bookmark.query.filter_by(user_id=current_user.id).count(),
+        'total_views': sum(r.view_count for r in user_researches),
+        'total_downloads': sum(r.download_count for r in user_researches),
+        'total_comments': Comment.query.filter_by(user_id=current_user.id).count(),
+        'most_viewed': Research.query.filter_by(user_id=current_user.id)\
+            .order_by(Research.view_count.desc()).first() if user_researches else None
+    }
+
+    return render_template('dashboard.html', researches=user_researches, stats=stats)
 
 
 # ============================================
