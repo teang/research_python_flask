@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}งานวิจัยทั้งหมด - ระบบจัดเก็บงานวิจัย{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h1><i class="bi bi-journal-text"></i> งานวิจัยทั้งหมด</h1>
+        <hr>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-8">
+        <form method="GET" action="{{ url_for('research.list') }}" class="row g-3">
+            <div class="col-md-8">
+                <input type="text" name="search" class="form-control" placeholder="ค้นหางานวิจัย..."
+                       value="{{ search }}">
+            </div>
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> ค้นหา
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-4 text-end">
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('research.add') }}" class="btn btn-success">
+            <i class="bi bi-plus-circle"></i> เพิ่มงานวิจัย
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-header">
+                <strong>หมวดหมู่</strong>
+            </div>
+            <div class="list-group list-group-flush">
+                <a href="{{ url_for('research.list') }}"
+                   class="list-group-item list-group-item-action {% if not selected_category %}active{% endif %}">
+                    ทั้งหมด
+                </a>
+                {% for category in categories %}
+                <a href="{{ url_for('research.list', category=category.id) }}"
+                   class="list-group-item list-group-item-action {% if selected_category == category.id %}active{% endif %}">
+                    {{ category.name }}
+                    <span class="badge bg-secondary float-end">{{ category.researches|length }}</span>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        {% if researches.items %}
+            {% for research in researches.items %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a href="{{ url_for('research.view', id=research.id) }}" class="text-decoration-none">
+                            {{ research.title }}
+                        </a>
+                    </h5>
+                    {% if research.title_en %}
+                    <h6 class="card-subtitle mb-2 text-muted">{{ research.title_en }}</h6>
+                    {% endif %}
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="bi bi-person"></i> {{ research.authors }} |
+                            <i class="bi bi-calendar"></i> {{ research.year or 'ไม่ระบุปี' }}
+                            {% if research.category %}
+                            | <i class="bi bi-folder"></i> {{ research.category.name }}
+                            {% endif %}
+                            {% if research.publication_type %}
+                            | <i class="bi bi-bookmark"></i> {{ research.publication_type }}
+                            {% endif %}
+                        </small>
+                    </p>
+                    {% if research.abstract %}
+                    <p class="card-text">{{ research.abstract[:300] }}{% if research.abstract|length > 300 %}...{% endif %}</p>
+                    {% endif %}
+                    {% if research.keywords %}
+                    <p class="card-text">
+                        <small><strong>คำสำคัญ:</strong> {{ research.keywords }}</small>
+                    </p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if researches.pages > 1 %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if researches.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('research.list', page=researches.prev_num, category=selected_category, search=search) }}">
+                            ก่อนหน้า
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for page_num in researches.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+                        {% if page_num %}
+                            <li class="page-item {% if page_num == researches.page %}active{% endif %}">
+                                <a class="page-link" href="{{ url_for('research.list', page=page_num, category=selected_category, search=search) }}">
+                                    {{ page_num }}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if researches.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('research.list', page=researches.next_num, category=selected_category, search=search) }}">
+                            ถัดไป
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> ไม่พบงานวิจัย
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

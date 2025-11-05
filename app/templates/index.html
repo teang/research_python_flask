@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}หน้าแรก - ระบบจัดเก็บงานวิจัย{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="jumbotron bg-light p-5 rounded">
+            <h1 class="display-4">ระบบจัดเก็บงานวิจัย</h1>
+            <p class="lead">ระบบจัดการและค้นหางานวิจัยอย่างมีประสิทธิภาพ</p>
+            <hr class="my-4">
+            <p>สามารถเพิ่ม แก้ไข ค้นหา และจัดการงานวิจัยได้อย่างสะดวก</p>
+            <a class="btn btn-primary btn-lg" href="{{ url_for('research.list') }}" role="button">
+                <i class="bi bi-search"></i> ค้นหางานวิจัย
+            </a>
+            {% if not current_user.is_authenticated %}
+            <a class="btn btn-success btn-lg" href="{{ url_for('auth.register') }}" role="button">
+                <i class="bi bi-person-plus"></i> ลงทะเบียน
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-journal-text display-4 text-primary"></i>
+                <h5 class="card-title mt-3">งานวิจัยทั้งหมด</h5>
+                <p class="card-text display-6">{{ total_researches }}</p>
+                <a href="{{ url_for('research.list') }}" class="btn btn-primary">ดูทั้งหมด</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-folder display-4 text-success"></i>
+                <h5 class="card-title mt-3">หมวดหมู่</h5>
+                <p class="card-text display-6">{{ total_categories }}</p>
+                <a href="{{ url_for('research.categories') }}" class="btn btn-success">ดูหมวดหมู่</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center">
+            <div class="card-body">
+                <i class="bi bi-plus-circle display-4 text-info"></i>
+                <h5 class="card-title mt-3">เพิ่มงานวิจัย</h5>
+                <p class="card-text">เพิ่มงานวิจัยใหม่<br>เข้าสู่ระบบ</p>
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('research.add') }}" class="btn btn-info">เพิ่มเลย</a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}" class="btn btn-info">เข้าสู่ระบบ</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if recent_researches %}
+<div class="row mt-5">
+    <div class="col-12">
+        <h2>งานวิจัยล่าสุด</h2>
+        <hr>
+    </div>
+    {% for research in recent_researches %}
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{{ url_for('research.view', id=research.id) }}" class="text-decoration-none">
+                        {{ research.title }}
+                    </a>
+                </h5>
+                {% if research.title_en %}
+                <h6 class="card-subtitle mb-2 text-muted">{{ research.title_en }}</h6>
+                {% endif %}
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="bi bi-person"></i> {{ research.authors }} |
+                        <i class="bi bi-calendar"></i> {{ research.year or 'ไม่ระบุปี' }}
+                        {% if research.category %}
+                        | <i class="bi bi-folder"></i> {{ research.category.name }}
+                        {% endif %}
+                    </small>
+                </p>
+                {% if research.abstract %}
+                <p class="card-text">{{ research.abstract[:200] }}{% if research.abstract|length > 200 %}...{% endif %}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endblock %}

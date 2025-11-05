@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} - ระบบจัดเก็บงานวิจัย{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url_for('main.index') }}">หน้าแรก</a></li>
+                <li class="breadcrumb-item"><a href="{{ url_for('research.list') }}">งานวิจัย</a></li>
+                <li class="breadcrumb-item active">{{ title }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="bi bi-pencil"></i> {{ title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+
+                    <h5 class="mb-3">ข้อมูลพื้นฐาน</h5>
+
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }} <span class="text-danger">*</span>
+                        {{ form.title(class="form-control" + (" is-invalid" if form.title.errors else "")) }}
+                        {% if form.title.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.title.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.title_en.label(class="form-label") }}
+                        {{ form.title_en(class="form-control" + (" is-invalid" if form.title_en.errors else "")) }}
+                        {% if form.title_en.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in form.title_en.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.authors.label(class="form-label") }} <span class="text-danger">*</span>
+                        {{ form.authors(class="form-control", rows="3") }}
+                        <small class="form-text text-muted">{{ form.authors.description }}</small>
+                        {% if form.authors.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.authors.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.abstract.label(class="form-label") }}
+                        {{ form.abstract(class="form-control", rows="6") }}
+                        {% if form.abstract.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.abstract.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.keywords.label(class="form-label") }}
+                        {{ form.keywords(class="form-control") }}
+                        <small class="form-text text-muted">{{ form.keywords.description }}</small>
+                        {% if form.keywords.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.keywords.errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <hr>
+                    <h5 class="mb-3">ข้อมูลการตีพิมพ์</h5>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.publication_type.label(class="form-label") }}
+                            {{ form.publication_type(class="form-select") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.year.label(class="form-label") }}
+                            {{ form.year(class="form-control", type="number") }}
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.journal_name.label(class="form-label") }}
+                        {{ form.journal_name(class="form-control") }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            {{ form.volume.label(class="form-label") }}
+                            {{ form.volume(class="form-control") }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.issue.label(class="form-label") }}
+                            {{ form.issue(class="form-control") }}
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            {{ form.pages.label(class="form-label") }}
+                            {{ form.pages(class="form-control") }}
+                            <small class="form-text text-muted">{{ form.pages.description }}</small>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <h5 class="mb-3">ข้อมูลเพิ่มเติม</h5>
+
+                    <div class="mb-3">
+                        {{ form.category_id.label(class="form-label") }}
+                        {{ form.category_id(class="form-select") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.doi.label(class="form-label") }}
+                        {{ form.doi(class="form-control") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.url.label(class="form-label") }}
+                        {{ form.url(class="form-control", type="url") }}
+                    </div>
+
+                    <div class="mb-3">
+                        {{ form.file_path.label(class="form-label") }}
+                        {{ form.file_path(class="form-control") }}
+                    </div>
+
+                    <hr>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('research.list') }}" class="btn btn-secondary">ยกเลิก</a>
+                        {{ form.submit(class="btn btn-primary") }}
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
