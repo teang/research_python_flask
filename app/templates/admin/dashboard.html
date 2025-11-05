@@ -11,11 +11,9 @@
 {% block content %}
 <!-- Info Boxes -->
 <div class="row">
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="info-box">
-            <div class="info-box-icon bg-info">
-                <i class="fas fa-users"></i>
-            </div>
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-users"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">ผู้ใช้งาน</span>
                 <span class="info-box-number">{{ stats.total_users }}</span>
@@ -23,11 +21,9 @@
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="info-box">
-            <div class="info-box-icon bg-success">
-                <i class="fas fa-book"></i>
-            </div>
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-book"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">งานวิจัย</span>
                 <span class="info-box-number">{{ stats.total_researches }}</span>
@@ -35,11 +31,9 @@
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="info-box">
-            <div class="info-box-icon bg-warning">
-                <i class="fas fa-comments"></i>
-            </div>
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-comments"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">ความคิดเห็น</span>
                 <span class="info-box-number">{{ stats.total_comments }}</span>
@@ -47,11 +41,9 @@
         </div>
     </div>
 
-    <div class="col-lg-3 col-md-6">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
         <div class="info-box">
-            <div class="info-box-icon bg-danger">
-                <i class="fas fa-download"></i>
-            </div>
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-download"></i></span>
             <div class="info-box-content">
                 <span class="info-box-text">ดาวน์โหลด</span>
                 <span class="info-box-number">{{ stats.total_downloads }}</span>
@@ -66,13 +58,13 @@
     <div class="col-lg-8">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-book me-2"></i>งานวิจัยล่าสุด
-                </h5>
+                <h3 class="card-title">
+                    <i class="fas fa-book mr-2"></i>งานวิจัยล่าสุด
+                </h3>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>ชื่องานวิจัย</th>
@@ -86,21 +78,21 @@
                             {% for research in recent_researches %}
                             <tr>
                                 <td>
-                                    <a href="{{ url_for('research.view', id=research.id) }}" class="text-decoration-none">
+                                    <a href="{{ url_for('research.view', id=research.id) }}">
                                         {{ research.title[:50] }}{% if research.title|length > 50 %}...{% endif %}
                                     </a>
                                 </td>
                                 <td>{{ research.authors[:30] }}{% if research.authors|length > 30 %}...{% endif %}</td>
                                 <td>
                                     {% if research.category %}
-                                        <span class="badge bg-primary">{{ research.category.name }}</span>
+                                        <span class="badge badge-primary">{{ research.category.name }}</span>
                                     {% else %}
-                                        <span class="badge bg-secondary">ไม่มี</span>
+                                        <span class="badge badge-secondary">ไม่มี</span>
                                     {% endif %}
                                 </td>
                                 <td>{{ research.created_at.strftime('%d/%m/%Y') }}</td>
                                 <td>
-                                    <span class="badge bg-success">
+                                    <span class="badge badge-success">
                                         <i class="fas fa-check-circle"></i> เผยแพร่แล้ว
                                     </span>
                                 </td>
@@ -121,9 +113,9 @@
     <div class="col-lg-4">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-chart-pie me-2"></i>สถิติระบบ
-                </h5>
+                <h3 class="card-title">
+                    <i class="fas fa-chart-pie mr-2"></i>สถิติระบบ
+                </h3>
             </div>
             <div class="card-body">
                 <div class="mb-4">
@@ -131,8 +123,8 @@
                         <span class="text-muted">ผู้ใช้งานใหม่ (7 วัน)</span>
                         <strong class="text-success">+{{ stats.new_users_week }}</strong>
                     </div>
-                    <div class="progress" style="height: 10px;">
-                        <div class="progress-bar bg-success" style="width: {{ (stats.new_users_week / stats.total_users * 100) if stats.total_users > 0 else 0 }}%"></div>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ (stats.new_users_week / stats.total_users * 100) if stats.total_users > 0 else 0 }}%" aria-valuenow="{{ stats.new_users_week }}" aria-valuemin="0" aria-valuemax="{{ stats.total_users }}"></div>
                     </div>
                 </div>
 
@@ -141,8 +133,8 @@
                         <span class="text-muted">งานวิจัยใหม่ (7 วัน)</span>
                         <strong class="text-info">+{{ stats.new_researches_week }}</strong>
                     </div>
-                    <div class="progress" style="height: 10px;">
-                        <div class="progress-bar bg-info" style="width: {{ (stats.new_researches_week / stats.total_researches * 100) if stats.total_researches > 0 else 0 }}%"></div>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: {{ (stats.new_researches_week / stats.total_researches * 100) if stats.total_researches > 0 else 0 }}%" aria-valuenow="{{ stats.new_researches_week }}" aria-valuemin="0" aria-valuemax="{{ stats.total_researches }}"></div>
                     </div>
                 </div>
 
@@ -151,8 +143,8 @@
                         <span class="text-muted">ความคิดเห็นใหม่ (7 วัน)</span>
                         <strong class="text-warning">+{{ stats.new_comments_week }}</strong>
                     </div>
-                    <div class="progress" style="height: 10px;">
-                        <div class="progress-bar bg-warning" style="width: {{ (stats.new_comments_week / stats.total_comments * 100) if stats.total_comments > 0 else 0 }}%"></div>
+                    <div class="progress progress-sm">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (stats.new_comments_week / stats.total_comments * 100) if stats.total_comments > 0 else 0 }}%" aria-valuenow="{{ stats.new_comments_week }}" aria-valuemin="0" aria-valuemax="{{ stats.total_comments }}"></div>
                     </div>
                 </div>
 
@@ -162,7 +154,7 @@
                 {% for category in popular_categories %}
                 <div class="d-flex justify-content-between mb-2">
                     <span>{{ category.name }}</span>
-                    <span class="badge bg-primary">{{ category.research_count }}</span>
+                    <span class="badge badge-primary">{{ category.research_count }}</span>
                 </div>
                 {% endfor %}
             </div>
@@ -170,28 +162,30 @@
 
         <div class="card mt-3">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-info-circle me-2"></i>ข้อมูลระบบ
-                </h5>
+                <h3 class="card-title">
+                    <i class="fas fa-info-circle mr-2"></i>ข้อมูลระบบ
+                </h3>
             </div>
-            <div class="card-body">
+            <div class="card-body p-0">
                 <table class="table table-sm">
-                    <tr>
-                        <td><i class="fas fa-server text-muted"></i> เวอร์ชั่น</td>
-                        <td class="text-end"><strong>1.0.0</strong></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fas fa-database text-muted"></i> ฐานข้อมูล</td>
-                        <td class="text-end"><strong>SQLite</strong></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fas fa-clock text-muted"></i> เวลาเซิร์ฟเวอร์</td>
-                        <td class="text-end"><strong>{{ current_time }}</strong></td>
-                    </tr>
-                    <tr>
-                        <td><i class="fas fa-hdd text-muted"></i> พื้นที่ใช้งาน</td>
-                        <td class="text-end"><strong>{{ stats.storage_used }}</strong></td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <td><i class="fas fa-server text-muted"></i> เวอร์ชั่น</td>
+                            <td class="text-right"><strong>1.0.0</strong></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-database text-muted"></i> ฐานข้อมูล</td>
+                            <td class="text-right"><strong>SQLite</strong></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-clock text-muted"></i> เวลาเซิร์ฟเวอร์</td>
+                            <td class="text-right"><strong>{{ current_time }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td><i class="fas fa-hdd text-muted"></i> พื้นที่ใช้งาน</td>
+                            <td class="text-right"><strong>{{ stats.storage_used }}</strong></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -203,13 +197,13 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <i class="fas fa-history me-2"></i>กิจกรรมล่าสุด
-                </h5>
+                <h3 class="card-title">
+                    <i class="fas fa-history mr-2"></i>กิจกรรมล่าสุด
+                </h3>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover table-striped">
                         <thead>
                             <tr>
                                 <th>ผู้ใช้</th>
@@ -231,10 +225,10 @@
                                 </td>
                                 <td>
                                     <span class="badge
-                                        {% if 'create' in log.action.lower() or 'add' in log.action.lower() %}bg-success
-                                        {% elif 'update' in log.action.lower() or 'edit' in log.action.lower() %}bg-info
-                                        {% elif 'delete' in log.action.lower() %}bg-danger
-                                        {% else %}bg-secondary{% endif %}">
+                                        {% if 'create' in log.action.lower() or 'add' in log.action.lower() %}badge-success
+                                        {% elif 'update' in log.action.lower() or 'edit' in log.action.lower() %}badge-info
+                                        {% elif 'delete' in log.action.lower() %}badge-danger
+                                        {% else %}badge-secondary{% endif %}">
                                         {{ log.action }}
                                     </span>
                                 </td>
@@ -250,11 +244,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="text-end mt-3">
-                    <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-sm btn-outline-primary">
-                        ดูทั้งหมด <i class="fas fa-arrow-right ms-1"></i>
-                    </a>
-                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-sm btn-primary float-right">
+                    ดูทั้งหมด <i class="fas fa-arrow-right ml-1"></i>
+                </a>
             </div>
         </div>
     </div>
