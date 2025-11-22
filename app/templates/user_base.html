@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard{% endblock %} - ระบบจัดเก็บงานวิจัย</title>
+
+    <!-- AdminLTE CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/css/adminlte.min.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts - Kanit & Sarabun -->
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+
+        /* Kanit for headings */
+        h1, h2, h3, h4, h5, h6, .font-heading {
+            font-family: 'Kanit', sans-serif;
+        }
+
+        /* Sidebar styling */
+        .main-sidebar {
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+        }
+
+        .nav-sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-sidebar .nav-link:hover {
+            color: #fff;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+
+        .brand-link {
+            background: rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Info box custom colors */
+        .info-box {
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            border-radius: 0.5rem;
+        }
+
+        .info-box-icon {
+            border-radius: 0.5rem 0 0 0.5rem;
+        }
+
+        /* Small box styling */
+        .small-box {
+            border-radius: 0.5rem;
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+        }
+
+        .small-box>.inner {
+            padding: 15px;
+        }
+
+        .small-box .icon {
+            color: rgba(0,0,0,.15);
+        }
+
+        /* Card styling */
+        .card {
+            box-shadow: 0 0 1px rgba(0,0,0,.125), 0 1px 3px rgba(0,0,0,.2);
+            border: none;
+        }
+
+        .card-header {
+            border-bottom: 1px solid rgba(0,0,0,.125);
+            background-color: transparent;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+    <div class="wrapper">
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ url_for('main.index') }}" class="nav-link">
+                        <i class="fas fa-home"></i> หน้าแรก
+                    </a>
+                </li>
+                <li class="nav-item d-none d-sm-inline-block">
+                    <a href="{{ url_for('research.list') }}" class="nav-link">
+                        <i class="fas fa-book"></i> งานวิจัยทั้งหมด
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+                <!-- Notifications Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell"></i>
+                        <span class="badge badge-warning navbar-badge">3</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">3 การแจ้งเตือน</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-envelope mr-2"></i> ความคิดเห็นใหม่
+                            <span class="float-right text-muted text-sm">3 นาที</span>
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item dropdown-footer">ดูการแจ้งเตือนทั้งหมด</a>
+                    </div>
+                </li>
+
+                <!-- User Dropdown Menu -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-user"></i>
+                        <span class="d-none d-md-inline ml-1">{{ current_user.username }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <div class="dropdown-item dropdown-header">
+                            <strong>{{ current_user.full_name or current_user.username }}</strong>
+                            <p class="text-sm text-muted mb-0">{{ current_user.email or 'ผู้ใช้งาน' }}</p>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('main.profile') }}" class="dropdown-item">
+                            <i class="fas fa-user mr-2"></i> โปรไฟล์
+                        </a>
+                        <a href="{{ url_for('main.edit_profile') }}" class="dropdown-item">
+                            <i class="fas fa-cog mr-2"></i> ตั้งค่า
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('auth.logout') }}" class="dropdown-item dropdown-footer text-danger">
+                            <i class="fas fa-sign-out-alt mr-2"></i> ออกจากระบบ
+                        </a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Brand Logo -->
+            <a href="{{ url_for('main.dashboard') }}" class="brand-link">
+                <i class="fas fa-book-open brand-image ml-3"></i>
+                <span class="brand-text font-weight-light font-heading">ระบบจัดเก็บงานวิจัย</span>
+            </a>
+
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Sidebar user panel -->
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <div class="img-circle elevation-2" style="width: 34px; height: 34px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                            {{ current_user.username[0].upper() }}
+                        </div>
+                    </div>
+                    <div class="info">
+                        <a href="{{ url_for('main.profile') }}" class="d-block">{{ current_user.username }}</a>
+                    </div>
+                </div>
+
+                <!-- Sidebar Menu -->
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <!-- Dashboard -->
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.dashboard') }}" class="nav-link {% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>แดชบอร์ด</p>
+                            </a>
+                        </li>
+
+                        <!-- Research Management -->
+                        <li class="nav-header">จัดการงานวิจัย</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('research.add') }}" class="nav-link {% if request.endpoint == 'research.add' %}active{% endif %}">
+                                <i class="nav-icon fas fa-plus-circle"></i>
+                                <p>เพิ่มงานวิจัยใหม่</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('research.list') }}" class="nav-link {% if request.endpoint == 'research.list' %}active{% endif %}">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>งานวิจัยทั้งหมด</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('research.categories') }}" class="nav-link {% if request.endpoint == 'research.categories' %}active{% endif %}">
+                                <i class="nav-icon fas fa-folder-open"></i>
+                                <p>หมวดหมู่</p>
+                            </a>
+                        </li>
+
+                        <!-- My Library -->
+                        <li class="nav-header">คลังของฉัน</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.bookmarks') }}" class="nav-link {% if request.endpoint == 'main.bookmarks' %}active{% endif %}">
+                                <i class="nav-icon fas fa-bookmark"></i>
+                                <p>งานวิจัยที่บันทึกไว้</p>
+                            </a>
+                        </li>
+
+                        <!-- Account -->
+                        <li class="nav-header">บัญชีของฉัน</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.profile') }}" class="nav-link {% if request.endpoint == 'main.profile' %}active{% endif %}">
+                                <i class="nav-icon fas fa-user"></i>
+                                <p>โปรไฟล์</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('main.edit_profile') }}" class="nav-link {% if request.endpoint == 'main.edit_profile' %}active{% endif %}">
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>ตั้งค่า</p>
+                            </a>
+                        </li>
+
+                        {% if current_user.is_admin %}
+                        <!-- Admin Section -->
+                        <li class="nav-header">ผู้ดูแลระบบ</li>
+                        <li class="nav-item">
+                            <a href="{{ url_for('admin.dashboard') }}" class="nav-link">
+                                <i class="nav-icon fas fa-shield-alt"></i>
+                                <p>Admin Panel</p>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+                <!-- /.sidebar-menu -->
+            </div>
+            <!-- /.sidebar -->
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 font-heading">{% block page_title %}Dashboard{% endblock %}</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="{{ url_for('main.dashboard') }}">หน้าแรก</a></li>
+                                {% block breadcrumb %}{% endblock %}
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Flash Messages -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{% if category == 'danger' %}danger{% elif category == 'success' %}success{% elif category == 'warning' %}warning{% else %}info{% endif %} alert-dismissible fade show" role="alert">
+                                    <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' %}exclamation-circle{% elif category == 'warning' %}exclamation-triangle{% else %}info-circle{% endif %} mr-2"></i>
+                                    {{ message }}
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    {% block content %}{% endblock %}
+                </div>
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <strong>Copyright &copy; 2025 <a href="{{ url_for('main.index') }}">ระบบจัดเก็บงานวิจัย</a>.</strong>
+            สงวนลิขสิทธิ์.
+            <div class="float-right d-none d-sm-inline-block">
+                <b>Version</b> 1.0.0
+            </div>
+        </footer>
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
